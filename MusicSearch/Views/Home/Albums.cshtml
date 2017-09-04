@@ -1,0 +1,35 @@
+﻿
+@{
+    ViewBag.Title = "Albums";
+}
+<style>
+    .image {
+        position: relative;
+        width: 100%;
+        max-width: 300px;
+    }
+
+    h2 {
+        position: absolute;
+        top: 200px;
+        left: 0;
+        width: 100%;
+        color: white;
+        background-color: rgba(0,0,0,.3);
+    }
+</style>
+
+<div class="row">
+    @if (@ViewBag.albums!=null)
+    {
+        foreach (var item in @ViewBag.albums)
+        {
+            <div class="col-md-4" style="min-height:300px; min-width:300px; padding:3px 3px 3px 3px">
+                <div class="image">
+                    <img src="@item.imageLarge" alt="" />
+                    <h2>@item.name<br />Listeners: @item.playcount</h2>
+                </div>
+            </div>   
+        }
+    }
+</div>
