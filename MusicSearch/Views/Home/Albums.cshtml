@@ -22,14 +22,16 @@
 <div class="row">
     @if (@ViewBag.albums!=null)
     {
-        foreach (var item in @ViewBag.albums)
-        {
-            <div class="col-md-4" style="min-height:300px; min-width:300px; padding:3px 3px 3px 3px">
-                <div class="image">
-                    <img src="@item.imageLarge" alt="" />
-                    <h2>@item.name<br />Listeners: @item.playcount</h2>
-                </div>
-            </div>   
-        }
+    foreach (var item in @ViewBag.albums)
+    {
+    <a href="/Home/Tracks/@ViewBag.authorAlbum/@item.name">
+        <div class="col-md-4" style="min-height:300px; min-width:300px; padding:3px 3px 3px 3px">
+            <div class="image">
+                <img src="@item.imageLarge" alt="" width="300" height="300"/>
+                <h2>@item.name<br />Playcount: @item.playcount</h2>
+            </div>
+        </div>
+    </a>
+    }
     }
 </div>

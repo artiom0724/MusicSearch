@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Mvc;
 
-namespace MusicSearch1
+namespace MusicSearch
 {
     public class FilterConfig
     {

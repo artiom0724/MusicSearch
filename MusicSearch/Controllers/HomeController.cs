@@ -16,13 +16,24 @@ namespace MusicSearch.Controllers
             return View();
         }
        
-        public ActionResult Albums(string author="")
+        public ActionResult Albums(string author = "")
         {
             if (author != "")
             {
                 getTopAlbums(1, author);
                 ViewBag.albums = albums;
+                ViewBag.authorAlbum = author;
             }
+            return View();
+        }
+
+        public ActionResult Tracks(string album, string author)
+        {
+            if(album!="" && author!="")
+            {
+                getTopTracksOfAlbum(1, author, album);
+                ViewBag.tracksOfAlbum = tracks;              
+            }          
             return View();
         }
 

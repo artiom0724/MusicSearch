@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace MusicSearch1
+namespace MusicSearch
 {
     public class RouteConfig
     {
@@ -18,6 +14,12 @@ namespace MusicSearch1
                 url: "{controller}/{action}/{author}",
                 defaults: new { controller = "Home", action = "Index", author = "" }
             );
+
+            routes.MapRoute(
+                name:"test",
+                url: "{controller}/{action}/{author}/{album}",
+                defaults: new { controller = "Home", action = "Index", author = "", album = "" }
+                );
         }
     }
 }
