@@ -38,10 +38,8 @@ namespace MusicSearch.apiService
                 webClient.QueryString.Add("country", country);
             if(album!=null)
                 webClient.QueryString.Add("album", album);
-            if (album != null)
-                webClient.QueryString.Add("limit", "100");
-            else
-                webClient.QueryString.Add("limit", "13");
+            if (album == null)              
+                webClient.QueryString.Add("limit", "25");
         }
 
         public void getTopOfAuthors(int numPage, string country="belarus")
@@ -56,7 +54,7 @@ namespace MusicSearch.apiService
             }
             XDocument document = XDocument.Parse(returnString);
             
-            for (int i = 0; i <= 8; i++)
+            for (int i = 0; i <= 24; i++)
             {
                 Author author = new Author();
                 author.imageLarge = document.Descendants("image").Where(s =>(string) s.Attribute("size")=="large").ElementAt(i).Value;
@@ -80,7 +78,7 @@ namespace MusicSearch.apiService
             XDocument document = XDocument.Parse(returnString);
             try
             {
-                for (int i = 0; i <= 11; i++)
+                for (int i = 0; i <= 24; i++)
                 {
                     Album album = new Album();
                     album.name = document.Descendants("name").ElementAt(i*2).Value;
@@ -112,12 +110,14 @@ namespace MusicSearch.apiService
             XDocument document = XDocument.Parse(returnString);
             try
             {
-                for (int i = 0; i <= 100; i++)
+                int i = 0;
+                while (true) 
                 {
                     Track track = new Track();
                     track.name = document.Descendants("tracks").ElementAt(0).Descendants("name").ElementAt(i * 2).Value;
                     track.duration = int.Parse(document.Descendants("duration").ElementAt(i).Value);
                     tracks.Add(track);
+                    i++;
                 }
             }
             catch (System.NullReferenceException)
@@ -127,6 +127,31 @@ namespace MusicSearch.apiService
             catch (System.ArgumentOutOfRangeException)
             {
                 return;
+            }
+        }
+
+        public void topAuthorsForView(int numPage)
+        {
+            getTopOfAuthors(numPage);
+            ViewBag.authors = authors;
+        }
+
+        public void topAlbumsForView(string author, int numpage)
+        {
+            if (author != "")
+            {
+                getTopAlbums(1, author);
+                ViewBag.albums = albums;
+                ViewBag.authorAlbum = author;
+            }
+        }
+
+        public void tracksOfAlbum(string author, string album, int numPage)
+        {
+            if (album != "" && author != "")
+            {
+                getTopTracksOfAlbum(1, author, album);
+                ViewBag.tracksOfAlbum = tracks;
             }
         }
     }
