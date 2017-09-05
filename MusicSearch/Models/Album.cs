@@ -7,12 +7,13 @@ namespace MusicSearch.Models
 {
     public class Album
     {
-        public string name { get; set; }
-        public int playcount { get; set; }
-        public string mbid { get; set; }
-        public string url { get; set; }
-        public string imageSmall { get; set; }
-        public string imageMedium { get; set; }
-        public string imageLarge { get; set; }
+        public string ArtistAlbum { get; set; }
+        public string Name { get; set; }
+        public int Playcount { get; set; }
+        public string Mbid { get; set; }
+        public string Url { get; set; }
+        public string ImageSmall { get; set; }
+        public string ImageMedium { get; set; }
+        public string ImageLarge { get; set; }
     }
 }

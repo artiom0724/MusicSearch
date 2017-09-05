@@ -1,4 +1,6 @@
-﻿@{
+﻿@using MusicSearch.Models
+@model List<Author>
+@{
     ViewBag.Title = "Home Page";
 }
 
@@ -17,7 +19,10 @@
 
     h2 {
         position: absolute;
-        top: 200px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        top: 70%;
         left: 0;
         width: 100%;
         color: white;
@@ -26,13 +31,13 @@
 </style>
 
 <div class="row">
-  @foreach (var item in @ViewBag.authors)
+  @foreach (var item in Model)
   {    
-        <a href="/Home/Albums/@item.name">
+        <a href="/Home/Albums/@item.Name">
             <div class="col-md-2" style="min-height:300px; min-width:300px; padding:3px 3px 3px 3px">
                 <div class="image">
-                    <img src="@item.imageLarge" alt="" width="300" height="300"/>
-                    <h2>@item.name<br />Listeners: @item.listeners</h2>
+                    <img src="@item.ImageLarge" alt="" width="300" height="300"/>
+                    <h2>@item.Name<br />Listeners: @item.Listeners</h2>
                 </div>
             </div>
         </a>   

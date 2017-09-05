@@ -7,13 +7,13 @@ namespace MusicSearch.Models
 {
     public class Track
     {
-        public string name { get; set; }
-        public int duration { get; set; }
-        public string mbid { get; set; }
-        public string url { get; set; }
-        public int streamable { get; set; }
-        public string imageSmall { get; set; }
-        public string imageMedium { get; set; }
-        public string imageLarge { get; set; }
+        public string Name { get; set; }
+        public int Duration { get; set; }
+        public string Mbid { get; set; }
+        public string Url { get; set; }
+        public int Streamable { get; set; }
+        public string ImageSmall { get; set; }
+        public string ImageMedium { get; set; }
+        public string ImageLarge { get; set; }
     }
 }

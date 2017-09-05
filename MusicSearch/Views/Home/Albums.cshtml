@@ -1,4 +1,5 @@
-﻿
+﻿@using MusicSearch.Models
+@model List<Album>
 @{
     ViewBag.Title = "Albums";
 }
@@ -11,7 +12,10 @@
 
     h2 {
         position: absolute;
-        top: 200px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        top: 70%;
         left: 0;
         width: 100%;
         color: white;
@@ -20,15 +24,15 @@
 </style>
 
 <div class="row">
-    @if (@ViewBag.albums!=null)
+    @if (Model!=null)
     {
-    foreach (var item in @ViewBag.albums)
+    foreach (var item in Model)
     {
-    <a href="/Home/Tracks/@ViewBag.authorAlbum/@item.name">
+    <a href="/Home/Tracks/@item.ArtistAlbum/@item.Name">
         <div class="col-md-2" style="min-height:300px; min-width:300px; padding:3px 3px 3px 3px">
             <div class="image">
-                <img src="@item.imageLarge" alt="" width="300" height="300"/>
-                <h2>@item.name<br />Playcount: @item.playcount</h2>
+                <img src="@item.ImageLarge" alt="" width="300" height="300"/>
+                <h2>@item.Name<br />Playcount: @item.Playcount</h2>
             </div>
         </div>
     </a>

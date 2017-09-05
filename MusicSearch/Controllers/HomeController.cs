@@ -7,24 +7,27 @@ using MusicSearch.apiService;
 
 namespace MusicSearch.Controllers
 {
-    public class HomeController : MyService
+    public class HomeController : Controller
     {
-        public ActionResult Index()
+        public MyService myService;
+
+        public HomeController()
         {
-            topAuthorsForView(1);
-            return View();
+            myService = new MyService();
+        }
+        public ActionResult Index()
+        {            
+            return View(myService.TopAuthorsForView());
         }
        
         public ActionResult Albums(string author = "")
-        {
-            topAlbumsForView(author,1);
-            return View();
+        {            
+            return View(myService.TopAlbumsForView(author));
         }
 
         public ActionResult Tracks(string album, string author)
-        {
-            tracksOfAlbum(author, album, 1);
-            return View();
+        {            
+            return View(myService.TracksOfAlbum(author, album));
         }
     }
 }
