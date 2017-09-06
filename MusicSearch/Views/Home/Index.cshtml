@@ -28,13 +28,20 @@
         color: white;
         background-color: rgba(0,0,0,.3);
     }
+    .col-md-2 {
+        min-height: 310px;
+        min-width: 310px;
+        max-height: 310px;
+        max-width: 310px;
+        padding: 3px 3px 3px 3px;
+    }
 </style>
 
 <div class="row">
   @foreach (var item in Model)
   {    
         <a href="/Home/Albums/@item.Name">
-            <div class="col-md-2" style="min-height:300px; min-width:300px; padding:3px 3px 3px 3px">
+            <div class="col-md-2">
                 <div class="image">
                     <img src="@item.ImageLarge" alt="" width="300" height="300"/>
                     <h2>@item.Name<br />Listeners: @item.Listeners</h2>

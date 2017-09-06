@@ -60,7 +60,7 @@ namespace MusicSearch.apiService
             if(album!=null)
                 webClient.QueryString.Add("album", album);
             if (album == null)              
-                webClient.QueryString.Add("limit", "25");
+                webClient.QueryString.Add("limit", "24");
 
             string returnString;
             using (webClient)
@@ -79,21 +79,14 @@ namespace MusicSearch.apiService
                 return tempNode.Where(attr => attr.Attribute(attribute).Value == attributeValue).First().Value;
         }
 
-        public void GetTopOfAuthors(int numPage, string country="belarus")
-        {           
-            XDocument document = XDocument.Parse(
-                SetOptions(methods["GetTopArtists"], numPage, country, null, null));
-            ReqestMethod(document, nodes["artist"]);              
-        }
-
         public void ReqestMethod(XDocument document, string typeNode)
         {
             var nodesOfTypeNodes = document.Descendants(typeNode);
             switch (typeNode)
             {
                 case "artist":
-                    foreach (var node in nodesOfTypeNodes)                   
-                        ReqestForArtists(node); 
+                    foreach (var node in nodesOfTypeNodes)
+                        ReqestForArtists(node);
                     break;
                 case "album":
                     foreach (var node in nodesOfTypeNodes)
@@ -107,11 +100,19 @@ namespace MusicSearch.apiService
 
         }
 
+        public void GetTopOfAuthors(int numPage, string country="belarus")
+        {           
+            XDocument document = XDocument.Parse(
+                SetOptions(methods["GetTopArtists"], numPage, country, null, null));
+            ReqestMethod(document, nodes["artist"]);              
+        }
+
         public void ReqestForArtists(XElement node)
         {
+            
             Author author = new Author();
             author.ImageLarge = ReqestForNode(node, "image", "size", "large");
-            author.Name = ReqestForNode(node, "name");
+            author.Name =EncodingFromUTF8toWin1251((ReqestForNode(node, "name"))) ;
             author.Listeners = int.Parse(ReqestForNode(node, "listeners"));
             authors.Add(author);
         }
@@ -126,10 +127,10 @@ namespace MusicSearch.apiService
         public void ReqestForAlbums(XElement node)
         {
             Album album = new Album();
-            album.Name = ReqestForNode(node, "name");
+            album.Name = EncodingFromUTF8toWin1251(ReqestForNode(node, "name"));
             album.ImageLarge = ReqestForNode(node, "image","size","large");
             album.Playcount = int.Parse(ReqestForNode(node, "playcount"));
-            album.ArtistAlbum = ReqestForNode(node.Descendants("artist").First(), "name");
+            album.ArtistAlbum = EncodingFromUTF8toWin1251(ReqestForNode(node.Descendants("artist").First(), "name"));
             albums.Add(album);
         }
 
@@ -143,7 +144,7 @@ namespace MusicSearch.apiService
         public void ReqestForTracks(XElement node)
         {
             Track track = new Track();
-            track.Name = ReqestForNode(node, "name");
+            track.Name = EncodingFromUTF8toWin1251(ReqestForNode(node, "name"));
             track.Duration = int.Parse(ReqestForNode(node, "duration"));
             tracks.Add(track);
         }
@@ -172,6 +173,17 @@ namespace MusicSearch.apiService
                 return tracks;
             }
             return null;
+        }
+
+        public string EncodingFromUTF8toWin1251(string encodeElement)
+        {
+            Encoding utf8 = Encoding.GetEncoding("UTF-8");
+            Encoding win1251 = Encoding.GetEncoding("Windows-1251");
+
+            byte[] utf8Bytes = win1251.GetBytes(encodeElement);
+            byte[] win1251Bytes = Encoding.Convert(utf8, win1251, utf8Bytes);
+
+            return win1251.GetString(win1251Bytes);
         }
     }
 }
