@@ -1,8 +1,6 @@
 ﻿@using MusicSearch.Models
-@model List<Album>
-@{
-    ViewBag.Title = "Albums";
-}
+@model List<Author>
+
 <style>
     .image {
         position: relative;
@@ -21,7 +19,9 @@
         color: white;
         background-color: rgba(0,0,0,.3);
     }
-    .col-md-2 {
+
+    .col-md-1 {
+        float: left;
         min-height: 310px;
         min-width: 310px;
         max-height: 310px;
@@ -29,20 +29,16 @@
         padding: 3px 3px 3px 3px;
     }
 </style>
-
 <div class="row">
-    @if (Model!=null)
+    @foreach (var item in Model)
     {
-    foreach (var item in Model)
-    {
-    <a href="/Home/Albums/@item.ArtistAlbum/Tracks/@item.Name">
-        <div class="col-md-2" >
-            <div class="image">
-                <img src="@item.ImageLarge" alt="" width="300" height="300"/>
-                <h2>@item.Name<br />Playcount: @item.Playcount</h2>
+        <a href="/Home/Albums/@item.Name">
+            <div class="col-md-1">
+                <div class="image">
+                    <img src="@item.ImageLarge" alt="" width="300" height="300" />
+                    <h2>@item.Name<br />Listeners: @item.Listeners</h2>
+                </div>
             </div>
-        </div>
-    </a>
-    }
+        </a>
     }
 </div>

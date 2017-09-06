@@ -70,13 +70,24 @@ namespace MusicSearch.apiService
             return returnString;
         }
 
-        public string ReqestForNode(XElement node, string findNode, string attribute = null, string attributeValue = null)
+        public string ReqestForNode(XElement node, string findNode, string [] attribute = null, string [] attributeValue = null)
         {
             var tempNode = node.Descendants(findNode);
+            
             if (attribute == null)
                 return tempNode.First().Value;
             else
-                return tempNode.Where(attr => attr.Attribute(attribute).Value == attributeValue).First().Value;
+            {             
+                return tempNode.ToList().Where((attr) => ForeachAttributes(attr,attribute,attributeValue)).First().Value;
+            }
+        }
+
+        public bool ForeachAttributes(XElement attr,string[] attribute = null, string[] attributeValue = null)
+        {
+            for (int i = 0; i < attribute.Length; i++)
+                if (attr.Attribute(attribute[i]).Value != attributeValue[i])
+                    return false;
+            return true;
         }
 
         public void ReqestMethod(XDocument document, string typeNode)
@@ -111,7 +122,7 @@ namespace MusicSearch.apiService
         {
             
             Author author = new Author();
-            author.ImageLarge = ReqestForNode(node, "image", "size", "large");
+            author.ImageLarge = ReqestForNode(node, "image",new string[]{ "size"}, new string[] { "large" });
             author.Name =EncodingFromUTF8toWin1251((ReqestForNode(node, "name"))) ;
             author.Listeners = int.Parse(ReqestForNode(node, "listeners"));
             authors.Add(author);
@@ -128,7 +139,7 @@ namespace MusicSearch.apiService
         {
             Album album = new Album();
             album.Name = EncodingFromUTF8toWin1251(ReqestForNode(node, "name"));
-            album.ImageLarge = ReqestForNode(node, "image","size","large");
+            album.ImageLarge = ReqestForNode(node, "image", new string[] { "size" }, new string[] { "large" });
             album.Playcount = int.Parse(ReqestForNode(node, "playcount"));
             album.ArtistAlbum = EncodingFromUTF8toWin1251(ReqestForNode(node.Descendants("artist").First(), "name"));
             albums.Add(album);
@@ -149,7 +160,7 @@ namespace MusicSearch.apiService
             tracks.Add(track);
         }
 
-        public List<Author> TopAuthorsForView(int numPage = 1)
+        public List<Author> TopAuthorsForView(int numPage)
         {
             GetTopOfAuthors(numPage);
             return authors;
