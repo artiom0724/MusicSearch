@@ -29,7 +29,6 @@ namespace MusicSearch.Controllers
         public ActionResult Albums(int? numPage,string author = "")
         {
             int tempPage = numPage ?? 1;
-            var test = Request.Url.AbsolutePath;
             if (Request.IsAjaxRequest())
             {
                 return PartialView("_Albums", myService.TopAlbumsForView(author,tempPage));

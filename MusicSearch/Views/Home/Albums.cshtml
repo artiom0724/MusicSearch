@@ -1,15 +1,13 @@
 ﻿@using MusicSearch.Models
 @model List<Album>
 @{
-    var path = Request.Url.AbsolutePath.ToString();
     ViewBag.Title = "Albums";
 }
 
 <div id="scrolList">
     @Html.Partial("_Albums")
 </div>
-<div id="loading"><img src="https://image.jimcdn.com/app/cms/image/transf/none/path/s235300062ee859d7/image/i0cdbddbbf43fbfba/version/1326800763/image.gif"></div>
-<p id="artist"></p>
+<img id="loading" src="http://www.playcast.ru/uploads/2016/02/23/17479109.gif" style="width:auto;margin-left:30%; margin-right:30%" height="80">
 @Scripts.Render("~/bundles/jquery")
 @Scripts.Render("~/bundles/bootstrap")
 <script type="text/javascript">
@@ -23,11 +21,11 @@ $(function () {
         if (page > 0 && !_inCallback) {
             _inCallback = true;
             page++;
-            $('div#loading').show();
+            $('img#loading').show();
 
-            $.ajax({
-                type: 'GET',
-                url: document.getElementById("artist") + '?numPage=' + page.toString(),
+                        $.ajax({
+                type: 'GET',
+                url: document.location.pathname + "?numPage=" + page.toString(),
                 success: function (data, textstatus) {
                     if (data != '') {
                         $("#scrolList").append(data);
@@ -36,7 +34,7 @@ $(function () {
                         page = 1;
                     }
                     _inCallback = false;
-                    $("div#loading").hide();
+                    $("img#loading").hide();
                 }
             });
         }

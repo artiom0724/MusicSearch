@@ -36,7 +36,7 @@
     @Html.Partial("_Items")
 </div>
 
-<div id="loading"><img src="https://image.jimcdn.com/app/cms/image/transf/none/path/s235300062ee859d7/image/i0cdbddbbf43fbfba/version/1326800763/image.gif"></div>
+<img id="loading" src="http://www.playcast.ru/uploads/2016/02/23/17479109.gif" style="margin-left:30%; margin-right:30%" height="80">
 
 @Scripts.Render("~/bundles/jquery")
 @Scripts.Render("~/bundles/bootstrap")
@@ -51,7 +51,7 @@ $(function () {
         if (page > 0 && !_inCallback) {
             _inCallback = true;
             page++;
-            $('div#loading').show();
+            $('img#loading').show();
  
             $.ajax({
                 type: 'GET',
@@ -64,7 +64,7 @@ $(function () {
                         page = 1;
                     }
                     _inCallback = false;
-                    $("div#loading").hide();
+                    $("img#loading").hide();
                 }
             });
         }
@@ -77,16 +77,3 @@ $(function () {
     });
 })
 </script>
-@*<div class="row">
-  @foreach (var item in Model)
-  {    
-        <a href="/Home/Albums/@item.Name">
-            <div class="col-md-1">
-                <div class="image">
-                    <img src="@item.ImageLarge" alt="" width="300" height="300"/>
-                    <h2>@item.Name<br />Listeners: @item.Listeners</h2>
-                </div>
-            </div>
-        </a>   
-  }
-</div>*@
