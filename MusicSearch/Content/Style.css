@@ -1,0 +1,34 @@
+﻿.image {
+    position: relative;
+    width: 100%;
+    max-width: 300px;
+}
+
+h2 {
+    position: absolute;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    top: 70%;
+    left: 0;
+    width: 100%;
+    color: white;
+    background-color: rgba(0,0,0,.3);
+}
+
+.col-md-2 {
+    min-height: 310px;
+    min-width: 310px;
+    max-height: 310px;
+    max-width: 310px;
+    padding: 3px 3px 3px 3px;
+}
+
+.col-md-1 {
+    float: left;
+    min-height: 310px;
+    min-width: 310px;
+    max-height: 310px;
+    max-width: 310px;
+    padding: 3px 3px 3px 3px;
+}

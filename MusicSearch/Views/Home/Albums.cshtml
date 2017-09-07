@@ -7,43 +7,7 @@
 <div id="scrolList">
     @Html.Partial("_Albums")
 </div>
-<img id="loading" src="http://www.playcast.ru/uploads/2016/02/23/17479109.gif" style="width:auto;margin-left:30%; margin-right:30%" height="80">
+<img id="loading" src="http://www.playcast.ru/uploads/2016/02/23/17479109.gif" style="width:auto;margin-left:40%; margin-right:40%" height="80">
 @Scripts.Render("~/bundles/jquery")
 @Scripts.Render("~/bundles/bootstrap")
-<script type="text/javascript">
-$(function () {
- 
-    $('div#loading').hide();
- 
-        var page = 1;
-    var _inCallback = false;
-    function loadItems() {
-        if (page > 0 && !_inCallback) {
-            _inCallback = true;
-            page++;
-            $('img#loading').show();
-
-                        $.ajax({
-                type: 'GET',
-                url: document.location.pathname + "?numPage=" + page.toString(),
-                success: function (data, textstatus) {
-                    if (data != '') {
-                        $("#scrolList").append(data);
-                    }
-                    else {
-                        page = 1;
-                    }
-                    _inCallback = false;
-                    $("img#loading").hide();
-                }
-            });
-        }
-    }
-    
-    $(window).scroll(function () {
-        if ($(window).scrollTop() == $(document).height() - $(window).height()) { 
-            loadItems();
-        }
-    });
-})
-</script>
+<script src="~/Scripts/ScrollingAlbums.js"></script>
