@@ -40,5 +40,10 @@ namespace MusicSearch.Controllers
         {            
             return View(myService.TracksOfAlbum(author, album));
         }
+
+        public ActionResult Search()
+        {
+            return PartialView();
+        }
     }
 }

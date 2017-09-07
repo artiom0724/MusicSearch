@@ -27,7 +27,10 @@ namespace MusicSearch.apiService
             methods.Add("GetTopArtists", "geo.gettopartists");
             methods.Add("GetTopAlbumsOfArtist", "artist.gettopalbums");
             methods.Add("GetTracksOfAlbum", "album.getinfo");
-           
+            methods.Add("SearchArtists","artist.search");
+            methods.Add("SearchAlbums", "album.search");
+            methods.Add("SearchTracks", "track.search");
+
             nodes = new Dictionary<string, string>();
             nodes.Add("artist", "artist");
             nodes.Add("album", "album");
@@ -45,7 +48,7 @@ namespace MusicSearch.apiService
             tracks = new List<Track>();
         }
 
-        public string SetOptions(string method, int numPage, string country, string artist, string album)
+        public string SetOptions(string method, int numPage, string country, string artist, string album, int limit = 24)
         {
             var webClient = new WebClient();
             webClient.QueryString.Add("method", method);
@@ -60,7 +63,7 @@ namespace MusicSearch.apiService
             if(album!=null)
                 webClient.QueryString.Add("album", album);
             if (album == null)              
-                webClient.QueryString.Add("limit", "24");
+                webClient.QueryString.Add("limit", limit.ToString());
 
             string returnString;
             using (webClient)
@@ -186,6 +189,22 @@ namespace MusicSearch.apiService
             return null;
         }
 
+        public List<Author> SearchArtists()
+        {
+            return null;
+        }
+
+        public List<Album> SearchAlbums()
+        {
+            return null;
+        }
+
+
+        public List<Track> SearchTracks()
+        {
+            return null;
+        }
+       
         public string EncodingFromUTF8toWin1251(string encodeElement)
         {
             Encoding utf8 = Encoding.GetEncoding("UTF-8");
