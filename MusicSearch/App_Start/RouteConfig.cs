@@ -21,11 +21,7 @@ namespace MusicSearch
                 defaults: new { controller = "Home", action = "Index", author = "", album = "" }
                 );
 
-            routes.MapRoute(
-                name: "IndexId",
-                url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
-                );
+           
         }
     }
 }

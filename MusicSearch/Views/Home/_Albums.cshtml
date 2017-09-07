@@ -1,0 +1,45 @@
+﻿@using MusicSearch.Models
+@model List<Album>
+<style>
+    .image {
+        position: relative;
+        width: 100%;
+        max-width: 300px;
+    }
+
+    h2 {
+        position: absolute;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        top: 70%;
+        left: 0;
+        width: 100%;
+        color: white;
+        background-color: rgba(0,0,0,.3);
+    }
+
+    .col-md-2 {
+        min-height: 310px;
+        min-width: 310px;
+        max-height: 310px;
+        max-width: 310px;
+        padding: 3px 3px 3px 3px;
+    }
+</style>
+<div class="row">
+    @if (Model != null)
+    {
+        foreach (var item in Model)
+        {
+            <a href="/Home/Albums/@item.ArtistAlbum/Tracks/@item.Name">
+                <div class="col-md-2">
+                    <div class="image">
+                        <img src="@item.ImageLarge" alt="" width="300" height="300" />
+                        <h2>@item.Name<br />Playcount: @item.Playcount</h2>
+                    </div>
+                </div>
+            </a>
+        }
+    }
+</div>

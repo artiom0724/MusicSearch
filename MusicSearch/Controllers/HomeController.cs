@@ -16,9 +16,9 @@ namespace MusicSearch.Controllers
         {
             myService = new MyService();
         }
-        public ActionResult Index(int? id)
+        public ActionResult Index(int ? author)
         {
-            int numPage = id ?? 1;
+            int numPage = author ?? 1;
             if(Request.IsAjaxRequest())
             {
                 return PartialView("_Items", myService.TopAuthorsForView(numPage));
@@ -26,10 +26,15 @@ namespace MusicSearch.Controllers
             return View(myService.TopAuthorsForView(numPage));
         }
        
-        public ActionResult Albums(string author = "")
+        public ActionResult Albums(int? numPage,string author = "")
         {
-            var test = Request.Url.AbsolutePath;            
-            return View(myService.TopAlbumsForView(author));
+            int tempPage = numPage ?? 1;
+            var test = Request.Url.AbsolutePath;
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_Albums", myService.TopAlbumsForView(author,tempPage));
+            }
+            return View(myService.TopAlbumsForView(author,tempPage));
         }
 
         public ActionResult Tracks(string album, string author)
