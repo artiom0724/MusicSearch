@@ -1,9 +1,9 @@
 ﻿<!DOCTYPE html>
 @using System.Text.RegularExpressions;
-@{ 
-    
+@{   
     var url = Server.UrlDecode(Request.Url.AbsolutePath.Replace("%20"," "));
 }
+
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -22,7 +22,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Artists", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("On-line", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -33,10 +33,29 @@
                             "Home")</li>
                     }
                 </ul>
+                <div class="navbar-right" style="max-width:30%;margin-top:8px; min-width:200px">
+                    <div class="container">      
+                        <form action="/Home/Search" method="post" style="width:inherit">
+                            <div class="col-sm-12">
+                                <div id="imaginary_container">
+                                    <div class="input-group stylish-input-group">
+                                        <input type="text" class="form-control" placeholder="Search" id="reqest" name="reqest">
+                                        <span class="input-group-addon">
+                                            <button type="submit">
+                                                <span class="glyphicon glyphicon-search"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-        </div>
+        </div>     
     </div>
     <div class="container body-content" style="max-width:100%">
+        
         @RenderBody()
         <hr />
         <footer>
@@ -49,3 +68,21 @@
     @RenderSection("scripts", required: false)
 </body>
 </html>
+<style type="text/css">
+    .stylish-input-group .input-group-addon {
+        background: white !important;
+    }
+    .form-control{
+        max-width:100%;
+    }
+    .stylish-input-group .form-control {
+        border-right: 0;
+        box-shadow: 0 0 0;
+        border-color: #ccc;
+    }
+
+    .stylish-input-group button {
+        border: 0;
+        background: transparent;
+    }
+</style>

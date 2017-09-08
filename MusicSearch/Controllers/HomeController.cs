@@ -41,9 +41,27 @@ namespace MusicSearch.Controllers
             return View(myService.TracksOfAlbum(author, album));
         }
 
-        public ActionResult Search()
+        public ActionResult Search(string reqest=null)
         {
-            return PartialView();
+            var reqestModel = new List<string>();
+            if (reqest != null)
+            {  
+                reqestModel.Add(reqest);
+            }
+            return View(reqestModel);
+        }
+
+        public ActionResult SearchArtists(string reqest)
+        {
+            return PartialView("_Items", myService.SearchArtists(reqest));
+        }
+        public ActionResult SearchAlbums(string reqest)
+        {
+            return PartialView("_Albums", myService.SearchAlbums(reqest));
+        }
+        public ActionResult Searchtracks(string reqest)
+        {
+            return PartialView("Tracks", myService.SearchTracks(reqest));
         }
     }
 }

@@ -8,7 +8,9 @@ namespace MusicSearch.Models
     public class Track
     {
         public string Name { get; set; }
+        public string Artist { get; set; }
         public int Duration { get; set; }
+        public int Listeners { get; set; }
         public string Mbid { get; set; }
         public string Url { get; set; }
         public int Streamable { get; set; }

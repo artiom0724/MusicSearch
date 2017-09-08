@@ -48,23 +48,24 @@ namespace MusicSearch.apiService
             tracks = new List<Track>();
         }
 
-        public string SetOptions(string method, int numPage, string country, string artist, string album, int limit = 24)
+        public string SetOptions(string method, int numPage, string country, string artist, string album , int limit = 24, string track = null)
         {
             var webClient = new WebClient();
             webClient.QueryString.Add("method", method);
            
             webClient.QueryString.Add("page", numPage.ToString());
             webClient.QueryString.Add("api_key", api_key);
+            webClient.QueryString.Add("limit", limit.ToString());
 
             if (artist != null)
                 webClient.QueryString.Add("artist", artist);
             if (country!=null)
                 webClient.QueryString.Add("country", country);
             if(album!=null)
-                webClient.QueryString.Add("album", album);
-            if (album == null)              
-                webClient.QueryString.Add("limit", limit.ToString());
-
+                webClient.QueryString.Add("album", album);                     
+                
+            if (track != null)
+                webClient.QueryString.Add("track",track);
             string returnString;
             using (webClient)
             {
@@ -76,12 +77,11 @@ namespace MusicSearch.apiService
         public string ReqestForNode(XElement node, string findNode, string [] attribute = null, string [] attributeValue = null)
         {
             var tempNode = node.Descendants(findNode);
-            
-            if (attribute == null)
+            if (attribute == null)              
                 return tempNode.First().Value;
             else
-            {             
-                return tempNode.ToList().Where((attr) => ForeachAttributes(attr,attribute,attributeValue)).First().Value;
+            {
+                return tempNode.ToList().Where((attr) => ForeachAttributes(attr, attribute, attributeValue)).First().Value;
             }
         }
 
@@ -93,7 +93,7 @@ namespace MusicSearch.apiService
             return true;
         }
 
-        public void ReqestMethod(XDocument document, string typeNode)
+        public void ReqestMethod(XDocument document, string typeNode, bool reqestSearch = false)
         {
             var nodesOfTypeNodes = document.Descendants(typeNode);
             switch (typeNode)
@@ -104,11 +104,11 @@ namespace MusicSearch.apiService
                     break;
                 case "album":
                     foreach (var node in nodesOfTypeNodes)
-                        ReqestForAlbums(node);
+                        ReqestForAlbums(node, reqestSearch);
                     break;
                 case "track":
                     foreach (var node in nodesOfTypeNodes)
-                        ReqestForTracks(node);
+                        ReqestForTracks(node, reqestSearch);
                     break;
             }
 
@@ -138,13 +138,16 @@ namespace MusicSearch.apiService
             ReqestMethod(document, nodes["album"]);
         }
 
-        public void ReqestForAlbums(XElement node)
+        public void ReqestForAlbums(XElement node, bool reqestSearch = false)
         {
             Album album = new Album();
             album.Name = EncodingFromUTF8toWin1251(ReqestForNode(node, "name"));
             album.ImageLarge = ReqestForNode(node, "image", new string[] { "size" }, new string[] { "large" });
             album.Playcount = int.Parse(ReqestForNode(node, "playcount"));
-            album.ArtistAlbum = EncodingFromUTF8toWin1251(ReqestForNode(node.Descendants("artist").First(), "name"));
+            if (!reqestSearch)
+                album.ArtistAlbum = EncodingFromUTF8toWin1251(ReqestForNode(node.Descendants("artist").First(), "name"));
+            else
+                album.ArtistAlbum = EncodingFromUTF8toWin1251(ReqestForNode(node, "artist"));
             albums.Add(album);
         }
 
@@ -155,16 +158,44 @@ namespace MusicSearch.apiService
             ReqestMethod(document, "track");
         }
 
-        public void ReqestForTracks(XElement node)
+        public void ReqestForTracks(XElement node, bool reqestSearch = false)
         {
             Track track = new Track();
+            track.Listeners = 0;
             track.Name = EncodingFromUTF8toWin1251(ReqestForNode(node, "name"));
-            track.Duration = int.Parse(ReqestForNode(node, "duration"));
+            track.Artist = EncodingFromUTF8toWin1251(ReqestForNode(node,"name"));
+            if (!reqestSearch)
+                track.Duration = int.Parse(ReqestForNode(node, "duration"));
+            else
+                track.Listeners = int.Parse(ReqestForNode(node, "listeners"));
             tracks.Add(track);
+        }
+
+        public void SearchArtistsMehod(string reqest, int numPage)
+        {
+          
+            XDocument document = XDocument.Parse(
+                SetOptions(methods["SearchArtists"], numPage, null, reqest, null).Replace("opensearch:",""));
+            ReqestMethod(document,"artist");
+        }
+
+        public void SearchAlbumsMethod(string reqest, int numPage)
+        {
+            XDocument document = XDocument.Parse(
+                SetOptions(methods["SearchAlbums"], numPage, null, null, reqest).Replace("opensearch:", "").Replace("streamable", "playcount"));
+            ReqestMethod(document, "album", true);
+        }
+
+        public void SearchTracksMethod(string reqest, int numPage)
+        {
+            XDocument document = XDocument.Parse(
+                SetOptions(methods["SearchTracks"], numPage, null, null, null,24,reqest).Replace("opensearch:", ""));
+            ReqestMethod(document, "track", true);
         }
 
         public List<Author> TopAuthorsForView(int numPage)
         {
+            authors.Clear();
             GetTopOfAuthors(numPage);
             return authors;
         }
@@ -189,20 +220,25 @@ namespace MusicSearch.apiService
             return null;
         }
 
-        public List<Author> SearchArtists()
+        public List<Author> SearchArtists(string reqest, int numPage=1)
         {
-            return null;
+            authors.Clear();
+            SearchArtistsMehod(reqest, numPage);
+            return authors;
         }
 
-        public List<Album> SearchAlbums()
+        public List<Album> SearchAlbums(string reqest, int numPage = 1)
         {
-            return null;
+            albums.Clear();
+            SearchAlbumsMethod(reqest,numPage);
+            return albums;
         }
 
-
-        public List<Track> SearchTracks()
+        public List<Track> SearchTracks(string reqest, int numPage = 1)
         {
-            return null;
+            tracks.Clear();
+            SearchTracksMethod(reqest, numPage);
+            return tracks;
         }
        
         public string EncodingFromUTF8toWin1251(string encodeElement)

@@ -9,19 +9,32 @@
         width: 100%;
         max-width: 300px;
     }   
+    .col-md-4{
+        min-height:140px;
+    }
 </style>
 <div class="row">
     @if (Model!= null && Model.Count != 0)
     {
         foreach (var item in Model)
         {
-            <div class="col-md-4">                
+            <div class="col-md-4">         
+                <div class="col-md-2">
                     <a href="#">
                         <img class="media-object" src="https://icon-icons.com/icons2/936/PNG/512/play-sign_icon-icons.com_73455.png" height="50" width="50">
-                    </a>                
-                    <h4 class="media-heading">@item.Name</h4>
-                    <p> Duration: @item.Duration</p>         
-                <br/>
+                    </a>
+                </div>
+                <div class="col-md-10">
+                    <h4 class="media-heading">@item.Artist - @item.Name</h4>
+                    @if (item.Listeners != 0)
+                    {
+                        <p>Listeners: @item.Listeners</p>
+                    }
+                    else
+                    {
+                        <p> Duration: @item.Duration</p>
+                    }
+                </div>
             </div>
         }
     }

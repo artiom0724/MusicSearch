@@ -1,0 +1,24 @@
+﻿@model List<string>
+@{
+    ViewBag.Title = "Search";
+}
+@if (Model != null && Model.Count != 0)
+{
+    <div class="row">
+        <div class="col-md-5">
+            <div id="scrolListArtists">
+                @Html.Action("SearchArtists", "Home", Model.First())
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div id="scrolListAlbums">
+                @Html.Action("SearchAlbums", "Home", Model.First())
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div id="scrolListTracks">
+                @Html.Action("SearchTracks", "Home", Model.First())
+            </div>
+        </div>
+    </div>
+}
