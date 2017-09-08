@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using MusicSearch.apiService;
 using System.Text.RegularExpressions;
 using MusicSearch.Models;
+using System.Diagnostics;
 
 namespace MusicSearch.Controllers
 {

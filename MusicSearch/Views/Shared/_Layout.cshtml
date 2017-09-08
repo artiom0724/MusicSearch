@@ -9,29 +9,43 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title – приложение ASP.NET</title>
+    <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container"  style="max-width:100%">
-            <div class="navbar-header">
+            <div class="navbar-header">               
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("On-line", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                </button>  
+                @Html.ActionLink("Top Artists", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
-            <div class="navbar-collapse collapse">
+            <div class="navbar-collapse collapse">              
                 <ul class="nav navbar-nav">
+                    <li style="margin-top:8px">
+                        <div class="dropdown">
+                            <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                                Online-offline
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Online</a></li>
+                                <li><a href="#">Offline</a></li>
+                            </ul>
+                        </div>
+                    </li>
                     @for (int i = 3; i < url.Split('/').Length; i+=2)
                     {
-                         <li>@Html.ActionLink(" " + url.Split('/')[i],    String.Join("/", url.Split('/'), 2, i - 1), "Home")</li>
+                         <li style="color:aliceblue">@Html.ActionLink(" " + url.Split('/')[i],    String.Join("/", url.Split('/'), 2, i - 1), "Home")</li>
                     }
                 </ul>
-                <div class="navbar-right" style="max-width:30%;margin-top:8px; min-width:200px">
+                <div class="navbar-right" style="max-width:40%;margin-top:8px">
                     <div class="container">      
                         <form action="/Home/Search/Reqest" method="post" style="width:inherit">
                             <div class="col-sm-12">
@@ -46,8 +60,9 @@
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                        </form>                        
                     </div>
+
                 </div>
             </div>
         </div>     
