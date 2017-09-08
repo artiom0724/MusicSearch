@@ -209,7 +209,6 @@
     <Content Include="Views\Home\_Items.cshtml" />
     <Content Include="Views\Home\_Albums.cshtml" />
     <Content Include="Views\Home\Search.cshtml" />
-    <Content Include="Views\Home\_Search.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
