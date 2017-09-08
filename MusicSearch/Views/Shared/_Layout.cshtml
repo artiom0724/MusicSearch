@@ -28,14 +28,12 @@
                 <ul class="nav navbar-nav">
                     @for (int i = 3; i < url.Split('/').Length; i+=2)
                     {
-                         <li>@Html.ActionLink(" " + url.Split('/')[i],
-                            String.Join("/", url.Split('/'), 2, i - 1),
-                            "Home")</li>
+                         <li>@Html.ActionLink(" " + url.Split('/')[i],    String.Join("/", url.Split('/'), 2, i - 1), "Home")</li>
                     }
                 </ul>
                 <div class="navbar-right" style="max-width:30%;margin-top:8px; min-width:200px">
                     <div class="container">      
-                        <form action="/Home/Search" method="post" style="width:inherit">
+                        <form action="/Home/Search/Reqest" method="post" style="width:inherit">
                             <div class="col-sm-12">
                                 <div id="imaginary_container">
                                     <div class="input-group stylish-input-group">

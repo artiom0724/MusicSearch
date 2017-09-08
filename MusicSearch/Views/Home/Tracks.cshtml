@@ -3,43 +3,34 @@
 @{
     ViewBag.Title = "Tracks";
 }
-<style>
-    .image {
-        position: relative;
-        width: 100%;
-        max-width: 300px;
-    }   
-    .col-md-4{
-        min-height:140px;
-    }
-</style>
-<div class="row">
-    @if (Model!= null && Model.Count != 0)
-    {
-        foreach (var item in Model)
+@if (Model != null && Model.Count != 0)
+{
+    <ul class="media-list">
+        @foreach (var item in Model)
         {
-            <div class="col-md-4">         
-                <div class="col-md-2">
-                    <a href="#">
-                        <img class="media-object" src="https://icon-icons.com/icons2/936/PNG/512/play-sign_icon-icons.com_73455.png" height="50" width="50">
-                    </a>
-                </div>
-                <div class="col-md-10">
+            <li class="media">
+                <div class="media-left">                   
+                        <a href="#">
+                            <img src="https://icon-icons.com/icons2/936/PNG/512/play-sign_icon-icons.com_73455.png" height="50" width="50">
+                        </a>
+                    </div>             
+                <div class="media-body">
                     <h4 class="media-heading">@item.Artist - @item.Name</h4>
-                    @if (item.Listeners != 0)
+                   @if (item.Listeners != 0)
                     {
-                        <p>Listeners: @item.Listeners</p>
+                       <h5>Listeners: @item.Listeners</h5> 
                     }
                     else
                     {
-                        <p> Duration: @item.Duration</p>
-                    }
+                        <h5>Duration: @item.Duration</h5>
+                   }
                 </div>
-            </div>
+            </li>
         }
-    }
-    else
-    {
-        <h1>No tracks at site...</h1>
-    }
-</div>
+</ul>
+}
+else
+{
+    <h1> No tracks at site...</h1>
+}
+

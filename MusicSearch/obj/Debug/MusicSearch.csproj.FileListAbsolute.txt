@@ -143,7 +143,7 @@ C:\Users\a.zubel\MusicSearch\MusicSearch\bin\ru\System.Web.Razor.resources.dll
 C:\Users\a.zubel\MusicSearch\MusicSearch\bin\ru\System.Web.WebPages.resources.dll
 C:\Users\a.zubel\MusicSearch\MusicSearch\bin\ru\System.Web.WebPages.Deployment.resources.dll
 C:\Users\a.zubel\MusicSearch\MusicSearch\bin\ru\System.Web.WebPages.Razor.resources.dll
-C:\Users\a.zubel\MusicSearch\MusicSearch\obj\Debug\MusicSearch.csprojResolveAssemblyReference.cache
 C:\Users\a.zubel\MusicSearch\MusicSearch\obj\Debug\MusicSearch.csproj.CoreCompileInputs.cache
 C:\Users\a.zubel\MusicSearch\MusicSearch\obj\Debug\MusicSearch.dll
 C:\Users\a.zubel\MusicSearch\MusicSearch\obj\Debug\MusicSearch.pdb
+C:\Users\a.zubel\MusicSearch\MusicSearch\obj\Debug\MusicSearch.csprojResolveAssemblyReference.cache

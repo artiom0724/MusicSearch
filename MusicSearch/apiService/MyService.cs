@@ -23,18 +23,22 @@ namespace MusicSearch.apiService
 
         public void LastFmStart()
         {
-            methods = new Dictionary<string, string>();
-            methods.Add("GetTopArtists", "geo.gettopartists");
-            methods.Add("GetTopAlbumsOfArtist", "artist.gettopalbums");
-            methods.Add("GetTracksOfAlbum", "album.getinfo");
-            methods.Add("SearchArtists","artist.search");
-            methods.Add("SearchAlbums", "album.search");
-            methods.Add("SearchTracks", "track.search");
+            methods = new Dictionary<string, string>
+            {
+                { "GetTopArtists", "geo.gettopartists" },
+                { "GetTopAlbumsOfArtist", "artist.gettopalbums" },
+                { "GetTracksOfAlbum", "album.getinfo" },
+                { "SearchArtists", "artist.search" },
+                { "SearchAlbums", "album.search" },
+                { "SearchTracks", "track.search" }
+            };
 
-            nodes = new Dictionary<string, string>();
-            nodes.Add("artist", "artist");
-            nodes.Add("album", "album");
-            nodes.Add("track", "track");
+            nodes = new Dictionary<string, string>
+            {
+                { "artist", "artist" },
+                { "album", "album" },
+                { "track", "track" }
+            };
 
             reqestUrl = "http://ws.audioscrobbler.com/2.0/";
             api_key = "4b256082800180d4f07db1a324cca7b8";
@@ -222,21 +226,18 @@ namespace MusicSearch.apiService
 
         public List<Author> SearchArtists(string reqest, int numPage=1)
         {
-            authors.Clear();
             SearchArtistsMehod(reqest, numPage);
             return authors;
         }
 
         public List<Album> SearchAlbums(string reqest, int numPage = 1)
         {
-            albums.Clear();
             SearchAlbumsMethod(reqest,numPage);
             return albums;
         }
 
         public List<Track> SearchTracks(string reqest, int numPage = 1)
-        {
-            tracks.Clear();
+        {      
             SearchTracksMethod(reqest, numPage);
             return tracks;
         }

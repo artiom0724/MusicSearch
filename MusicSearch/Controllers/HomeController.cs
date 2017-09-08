@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using MusicSearch.apiService;
 using System.Text.RegularExpressions;
+using MusicSearch.Models;
 
 namespace MusicSearch.Controllers
 {
@@ -41,27 +42,28 @@ namespace MusicSearch.Controllers
             return View(myService.TracksOfAlbum(author, album));
         }
 
-        public ActionResult Search(string reqest=null)
+        public ActionResult Search(int? numPage, string reqest = "")
         {
-            var reqestModel = new List<string>();
-            if (reqest != null)
-            {  
-                reqestModel.Add(reqest);
-            }
-            return View(reqestModel);
-        }
 
-        public ActionResult SearchArtists(string reqest)
-        {
-            return PartialView("_Items", myService.SearchArtists(reqest));
-        }
-        public ActionResult SearchAlbums(string reqest)
-        {
-            return PartialView("_Albums", myService.SearchAlbums(reqest));
-        }
-        public ActionResult Searchtracks(string reqest)
-        {
-            return PartialView("Tracks", myService.SearchTracks(reqest));
+            if (reqest != "")
+            {
+                int tempPage = numPage ?? 1;
+                var searchresult = new SearchResult()
+                {
+                    Authors = myService.SearchArtists(reqest, tempPage),
+                    Albums = myService.SearchAlbums(reqest, tempPage),
+                    Tracks = myService.SearchTracks(reqest, tempPage),
+                    SearchReqest = reqest
+                };
+                var reqestModel = new List<string> {reqest};
+                
+                if (Request.IsAjaxRequest())
+                {
+                    return PartialView("Search", searchresult);
+                }
+                return View(searchresult);
+            }
+            return View();
         }
     }
 }

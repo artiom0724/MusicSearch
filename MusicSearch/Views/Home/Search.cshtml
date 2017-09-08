@@ -1,24 +1,35 @@
-﻿@model List<string>
+﻿@using MusicSearch.Models
+@model SearchResult
 @{
-    ViewBag.Title = "Search";
+    ViewBag.Title ="HELP";
 }
-@if (Model != null && Model.Count != 0)
-{
-    <div class="row">
-        <div class="col-md-5">
-            <div id="scrolListArtists">
-                @Html.Action("SearchArtists", "Home", Model.First())
+
+@if (Model != null)
+{ 
+    <h3 id="myreqest">@Model.SearchReqest</h3>
+    <div id="scrolList">
+        <div class="row">
+            <div class="col-md-5">
+                <div id="scrolListArtists">
+                    @Html.Partial("_Items", Model.Authors)
+                </div>
             </div>
-        </div>
-        <div class="col-md-5">
-            <div id="scrolListAlbums">
-                @Html.Action("SearchAlbums", "Home", Model.First())
+            <div class="col-md-5">
+                <div id="scrolListAlbums">
+                    @Html.Partial("_Albums", Model.Albums)
+                </div>
             </div>
-        </div>
-        <div class="col-md-2">
-            <div id="scrolListTracks">
-                @Html.Action("SearchTracks", "Home", Model.First())
+            <div class="col-md-2">
+                <div id="scrolListTracks">
+                    @Html.Partial("Tracks", Model.Tracks)
+                </div>
             </div>
-        </div>
+        </div>  
+        <hr/>
     </div>
 }
+<img id="loading" src="http://www.playcast.ru/uploads/2016/02/23/17479109.gif" style="margin-left:40%; margin-right:40%" height="80">
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+<script type="text/javascript" src="~/Scripts/ScrollingSearch.js"></script>     

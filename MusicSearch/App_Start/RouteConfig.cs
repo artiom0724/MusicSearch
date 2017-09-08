@@ -21,7 +21,11 @@ namespace MusicSearch
                 defaults: new { controller = "Home", action = "Index", author = "", album = "" }
                 );
 
-           
+            //routes.MapRoute(
+            //    name: "qwe",
+            //    url: "{controller}/{action}/Reqest/{reqest}/{numPage}",
+            //    defaults: new { controller = "Home", action = "Search", reqest = "", numPage = 1 }
+            //    );
         }
     }
 }
