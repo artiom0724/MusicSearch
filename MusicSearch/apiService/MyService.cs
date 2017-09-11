@@ -8,11 +8,17 @@ using System.Linq;
 using System.Text;
 using System;
 using System.Threading.Tasks;
+using System.Threading;
+using System.IO;
 
 namespace MusicSearch.apiService
 {
     public class MyService 
     {
+        private string onlineOffline;
+        private string offlinePath;
+        private string[] extensionFiles;
+
         private string reqestUrl ;
         private string api_key ;
         Dictionary<string, string> methods;
@@ -51,6 +57,20 @@ namespace MusicSearch.apiService
             authors = new List<Author>();
             albums = new List<Album>();
             tracks = new List<Track>();
+            onlineOffline = "online";
+            offlinePath = @"C:\Users\a.zubel\Music";
+            extensionFiles = new string[]{"mp3", "ogg", "wma", "flac", "aac", "mmf", "amr", "m4a", "m4r", "mp2", "wav" };
+            StartTimer();
+        }
+
+        public void SetOfflinePath(string path)
+        {
+            offlinePath = path;
+        }
+
+        public void SetOnlineOffline(string type)
+        {
+            onlineOffline = type;
         }
 
         public string SetOptions(string method, int numPage, string country, string artist, string album , int limit = 24, string track = null)
@@ -172,7 +192,10 @@ namespace MusicSearch.apiService
             if (!reqestSearch)
                 track.Duration = int.Parse(ReqestForNode(node, "duration"));
             else
+            {
+                track.ImageLarge = ReqestForNode(node, "image", new string[] { "size" }, new string[] { "large" });
                 track.Listeners = int.Parse(ReqestForNode(node, "listeners"));
+            }
             tracks.Add(track);
         }
 
@@ -201,15 +224,21 @@ namespace MusicSearch.apiService
         public List<Author> TopAuthorsForView(int numPage)
         {
             authors.Clear();
-            GetTopOfAuthors(numPage);
+            if (onlineOffline == "online")
+                GetTopOfAuthors(numPage);
+            else
+                GetAuthorsFromDB(numPage);
             return authors;
         }
 
-        public List<Album> TopAlbumsForView(string author, int numpage = 1)
+        public List<Album> TopAlbumsForView(string author, int numPage = 1)
         {
             if (author != "")
             {
-                GetTopAlbums(numpage, author);
+                if (onlineOffline == "online")
+                    GetTopAlbums(numPage, author);
+                else
+                    GetAlbumsFromDB(author, numPage);
                 return albums;
             }
             return null;
@@ -219,7 +248,10 @@ namespace MusicSearch.apiService
         {
             if (album != "" && author != "")
             {
-                GetTopTracksOfAlbum(numPage, author, album);
+                if (onlineOffline == "online")
+                    GetTopTracksOfAlbum(numPage, author, album);
+                else
+                    GetTracksFromDB(author, album, numPage);
                 return tracks;
             }
             return null;
@@ -254,5 +286,62 @@ namespace MusicSearch.apiService
             return win1251.GetString(win1251Bytes);
         }
 
+       public void GetAuthorsFromDB(int numPage)
+        {
+
+        }
+
+        public void GetAlbumsFromDB(string albums,int numPage)
+        {
+
+        }
+
+        public void GetTracksFromDB(string author, string album, int numPage)
+        {
+
+        }
+
+        public void StartTimer()
+        {
+            int num = 0;
+            TimerCallback tm = new TimerCallback(JastDoIt);
+            Timer timer = new Timer(tm, num, 0, 10000);//300000
+        }
+
+        List<string> resultSearchingFiles;
+       
+        public void JastDoIt(object obj)
+        {
+            Console.WriteLine("qwerty qwerty qwerty");
+
+            resultSearchingFiles = new List<string>();
+
+            SearchDirectories(new string[]{ offlinePath });
+          
+            Console.WriteLine("qwerty qwerty qwerty");
+        }
+
+        public void SearchDirectories(string[] dir)
+        {
+            foreach(var tempDir in dir)
+            {
+                SearchFiles(tempDir);
+                string[] dirInDir = Directory.GetDirectories(tempDir);
+                SearchDirectories(dirInDir);
+            }
+        }
+
+        public void SearchFiles(string paths)
+        {
+            foreach (var item in extensionFiles)
+            {
+                string[] filesInDir = Directory.GetFiles(paths,"*." + item);
+                foreach (var file in filesInDir)
+                {
+                    resultSearchingFiles.Add(file);//add to BD
+                }
+            }
+
+        }
     }
 }

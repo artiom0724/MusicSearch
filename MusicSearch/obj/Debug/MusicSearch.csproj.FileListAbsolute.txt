@@ -147,3 +147,7 @@ C:\Users\a.zubel\MusicSearch\MusicSearch\obj\Debug\MusicSearch.csproj.CoreCompil
 C:\Users\a.zubel\MusicSearch\MusicSearch\obj\Debug\MusicSearch.dll
 C:\Users\a.zubel\MusicSearch\MusicSearch\obj\Debug\MusicSearch.pdb
 C:\Users\a.zubel\MusicSearch\MusicSearch\obj\Debug\MusicSearch.csprojResolveAssemblyReference.cache
+C:\Users\a.zubel\MusicSearch\MusicSearch\bin\EntityFramework.dll
+C:\Users\a.zubel\MusicSearch\MusicSearch\bin\EntityFramework.SqlServer.dll
+C:\Users\a.zubel\MusicSearch\MusicSearch\bin\EntityFramework.xml
+C:\Users\a.zubel\MusicSearch\MusicSearch\bin\EntityFramework.SqlServer.xml

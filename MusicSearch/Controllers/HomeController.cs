@@ -66,5 +66,13 @@ namespace MusicSearch.Controllers
             }
             return View();
         }
+
+        public void OnlineOffline(int author)
+        {
+            if (author == 0)
+                myService.SetOnlineOffline("online");
+            else if(author == 1)
+                myService.SetOnlineOffline("offline");
+        }
     }
 }
