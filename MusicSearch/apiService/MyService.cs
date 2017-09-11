@@ -10,15 +10,14 @@ using System;
 using System.Threading.Tasks;
 using System.Threading;
 using System.IO;
+using Microsoft.Win32.TaskScheduler;
 
 namespace MusicSearch.apiService
 {
-    public class MyService 
+    public class MyService : MyTask
     {
         private string onlineOffline;
-        private string offlinePath;
-        private string[] extensionFiles;
-
+        
         private string reqestUrl ;
         private string api_key ;
         Dictionary<string, string> methods;
@@ -53,19 +52,16 @@ namespace MusicSearch.apiService
 
         public MyService()
         {
+            offlinePath = @"C:\Users\a.zubel\Music";
+            extensionFiles = new string[] { "mp3", "ogg", "wma", "flac", "aac", "mmf", "amr", "m4a", "m4r", "mp2", "wav" };
             LastFmStart();
             authors = new List<Author>();
             albums = new List<Album>();
             tracks = new List<Track>();
             onlineOffline = "online";
-            offlinePath = @"C:\Users\a.zubel\Music";
-            extensionFiles = new string[]{"mp3", "ogg", "wma", "flac", "aac", "mmf", "amr", "m4a", "m4r", "mp2", "wav" };
             StartTimer();
-        }
+            //CreateTaskRunner();
 
-        public void SetOfflinePath(string path)
-        {
-            offlinePath = path;
         }
 
         public void SetOnlineOffline(string type)
@@ -305,25 +301,45 @@ namespace MusicSearch.apiService
         {
             int num = 0;
             TimerCallback tm = new TimerCallback(JastDoIt);
-            Timer timer = new Timer(tm, num, 0, 10000);//300000
+            Timer timer = new Timer(tm, num, 0, 300000);//300000
         }
 
+        //public void CreateTaskRunner()
+        //{          
+        //    using (TaskService ts = new TaskService())
+        //    {
+        //        TaskDefinition td = ts.NewTask();
+        //        td.RegistrationInfo.Description = "NewTask for search Music";
+        //        TimeTrigger timeTrigger = new TimeTrigger();
+        //        timeTrigger.StartBoundary = DateTime.Now;
+        //        timeTrigger.Repetition.Interval = TimeSpan.FromMinutes(5);
+        //        td.Triggers.Add(timeTrigger);
+
+        //        td.Actions.Add(new ExecAction("searcher.exe", null, null)));
+        //        ts.RootFolder.RegisterTaskDefinition(@"Test", td);
+        //    }
+        //}
+
+        private string offlinePath;
+        private string[] extensionFiles;
         List<string> resultSearchingFiles;
-       
+
+        public void SetOfflinePath(string path)
+        {
+            offlinePath = path;
+        }
+
         public void JastDoIt(object obj)
         {
-            Console.WriteLine("qwerty qwerty qwerty");
-
+            resultSearchingFiles.Clear();
             resultSearchingFiles = new List<string>();
-
-            SearchDirectories(new string[]{ offlinePath });
-          
-            Console.WriteLine("qwerty qwerty qwerty");
+            SearchDirectories(new string[] { offlinePath });
+            ParseInDB();
         }
 
         public void SearchDirectories(string[] dir)
         {
-            foreach(var tempDir in dir)
+            foreach (var tempDir in dir)
             {
                 SearchFiles(tempDir);
                 string[] dirInDir = Directory.GetDirectories(tempDir);
@@ -335,7 +351,7 @@ namespace MusicSearch.apiService
         {
             foreach (var item in extensionFiles)
             {
-                string[] filesInDir = Directory.GetFiles(paths,"*." + item);
+                string[] filesInDir = Directory.GetFiles(paths, "*." + item);
                 foreach (var file in filesInDir)
                 {
                     resultSearchingFiles.Add(file);//add to BD
@@ -343,5 +359,20 @@ namespace MusicSearch.apiService
             }
 
         }
+
+        public void ParseInDB()
+        {
+            foreach (var file in resultSearchingFiles)
+            {
+                ReadOptionsAndUpdata(file);
+            }
+        }
+
+        public void ReadOptionsAndUpdata(string file)
+        {
+
+        }
+
+
     }
 }

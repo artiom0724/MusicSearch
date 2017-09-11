@@ -6,7 +6,7 @@ using System.Web;
 namespace MusicSearch.Models
 {
     public class Track
-    {
+    {  
         public string Name { get; set; }
         public string Artist { get; set; }
         public int Duration { get; set; }
