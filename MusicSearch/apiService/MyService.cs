@@ -7,6 +7,7 @@ using System.Xml.Linq;
 using System.Linq;
 using System.Text;
 using System;
+using System.Threading.Tasks;
 
 namespace MusicSearch.apiService
 {
@@ -252,5 +253,6 @@ namespace MusicSearch.apiService
 
             return win1251.GetString(win1251Bytes);
         }
+
     }
 }

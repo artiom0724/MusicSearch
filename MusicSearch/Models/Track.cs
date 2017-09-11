@@ -17,5 +17,6 @@ namespace MusicSearch.Models
         public string ImageSmall { get; set; }
         public string ImageMedium { get; set; }
         public string ImageLarge { get; set; }
+        public string DataMusic { get; set; }
     }
 }
