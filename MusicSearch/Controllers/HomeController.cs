@@ -18,6 +18,7 @@ namespace MusicSearch.Controllers
         {
             myService = new MyService();
         }
+
         public ActionResult Index(int ? author)
         {
             int numPage = author ?? 1;

@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using MusicSearch.apiService;
+using System.Web;
 using System.Web.Mvc;
 
 namespace MusicSearch
@@ -7,6 +8,8 @@ namespace MusicSearch
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
+            //MyService myService = new MyService();
+            //myService.StartTimer();
             filters.Add(new HandleErrorAttribute());
         }
     }

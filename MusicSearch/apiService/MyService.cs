@@ -16,6 +16,8 @@ namespace MusicSearch.apiService
 {
     public class MyService : MyTask
     {
+        public MyDbContext dbContext = new MyDbContext();
+
         private string onlineOffline;
         
         private string reqestUrl ;
@@ -23,7 +25,7 @@ namespace MusicSearch.apiService
         Dictionary<string, string> methods;
         Dictionary<string, string> nodes;
 
-        public List<Author> authors;
+        public List<Artist> authors;
         public List<Album> albums;
         public List<Track> tracks;
 
@@ -55,11 +57,11 @@ namespace MusicSearch.apiService
             offlinePath = @"C:\Users\a.zubel\Music";
             extensionFiles = new string[] { "mp3", "ogg", "wma", "flac", "aac", "mmf", "amr", "m4a", "m4r", "mp2", "wav" };
             LastFmStart();
-            authors = new List<Author>();
+            authors = new List<Artist>();
             albums = new List<Album>();
             tracks = new List<Track>();
             onlineOffline = "online";
-            StartTimer();
+            
             //CreateTaskRunner();
 
         }
@@ -145,7 +147,7 @@ namespace MusicSearch.apiService
         public void ReqestForArtists(XElement node)
         {
             
-            Author author = new Author();
+            Artist author = new Artist();
             author.ImageLarge = ReqestForNode(node, "image",new string[]{ "size"}, new string[] { "large" });
             author.Name =EncodingFromUTF8toWin1251((ReqestForNode(node, "name"))) ;
             author.Listeners = int.Parse(ReqestForNode(node, "listeners"));
@@ -217,7 +219,7 @@ namespace MusicSearch.apiService
             ReqestMethod(document, "track", true);
         }
 
-        public List<Author> TopAuthorsForView(int numPage)
+        public List<Artist> TopAuthorsForView(int numPage)
         {
             authors.Clear();
             if (onlineOffline == "online")
@@ -231,10 +233,10 @@ namespace MusicSearch.apiService
         {
             if (author != "")
             {
-                if (onlineOffline == "online")
+                //if (onlineOffline == "online")
                     GetTopAlbums(numPage, author);
-                else
-                    GetAlbumsFromDB(author, numPage);
+                //else
+                //    GetAlbumsFromDB(author, numPage);
                 return albums;
             }
             return null;
@@ -253,7 +255,7 @@ namespace MusicSearch.apiService
             return null;
         }
 
-        public List<Author> SearchArtists(string reqest, int numPage=1)
+        public List<Artist> SearchArtists(string reqest, int numPage=1)
         {
             SearchArtistsMehod(reqest, numPage);
             return authors;
@@ -284,7 +286,7 @@ namespace MusicSearch.apiService
 
        public void GetAuthorsFromDB(int numPage)
         {
-
+            authors.AddRange(dbContext.Artists.Where(item => item.Id < numPage * 25).ToList());
         }
 
         public void GetAlbumsFromDB(string albums,int numPage)
@@ -297,12 +299,12 @@ namespace MusicSearch.apiService
 
         }
 
-        public void StartTimer()
-        {
-            int num = 0;
-            TimerCallback tm = new TimerCallback(JastDoIt);
-            Timer timer = new Timer(tm, num, 0, 300000);//300000
-        }
+        //public void StartTimer()
+        //{
+        //    int num = 0;
+        //    TimerCallback tm = new TimerCallback(JastDoIt);
+        //    Timer timer = new Timer(tm, num, 0, 300000);//300000
+        //}
 
         //public void CreateTaskRunner()
         //{          
@@ -329,10 +331,10 @@ namespace MusicSearch.apiService
             offlinePath = path;
         }
 
-        public void JastDoIt(object obj)
-        {
-            resultSearchingFiles.Clear();
+        public void JastDoIt()
+        {            
             resultSearchingFiles = new List<string>();
+            resultSearchingFiles.Clear();
             SearchDirectories(new string[] { offlinePath });
             ParseInDB();
         }
@@ -354,7 +356,7 @@ namespace MusicSearch.apiService
                 string[] filesInDir = Directory.GetFiles(paths, "*." + item);
                 foreach (var file in filesInDir)
                 {
-                    resultSearchingFiles.Add(file);//add to BD
+                    resultSearchingFiles.Add(file);
                 }
             }
 
@@ -370,9 +372,20 @@ namespace MusicSearch.apiService
 
         public void ReadOptionsAndUpdata(string file)
         {
-
+            var audio = TagLib.File.Create(file);
+            Track track = new Track
+            {
+                Artist = String.Join(",", audio.Tag.Performers),
+                Name = audio.Tag.Title,
+                Album = audio.Tag.Album,
+                Duration = audio.Properties.Duration.Seconds,
+                Url = file
+            };
+            
+            if(dbContext.Tracks.Where(elem => elem.Url==file).Count() == 0)
+                dbContext.Tracks.Add(track);
+            dbContext.SaveChanges();
         }
-
 
     }
 }
