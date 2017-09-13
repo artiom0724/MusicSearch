@@ -18,7 +18,7 @@ namespace MusicSearch.apiService
     {
         public MyDbContext dbContext = new MyDbContext();
 
-        private string onlineOffline;
+        static private string onlineOffline;
         
         private string reqestUrl ;
         private string api_key ;
@@ -221,7 +221,6 @@ namespace MusicSearch.apiService
 
         public List<Artist> TopAuthorsForView(int numPage)
         {
-            authors.Clear();
             if (onlineOffline == "online")
                 GetTopOfAuthors(numPage);
             else
@@ -233,10 +232,10 @@ namespace MusicSearch.apiService
         {
             if (author != "")
             {
-                //if (onlineOffline == "online")
+                if (onlineOffline == "online")
                     GetTopAlbums(numPage, author);
-                //else
-                //    GetAlbumsFromDB(author, numPage);
+                else
+                    GetAlbumsFromDB(author, numPage);
                 return albums;
             }
             return null;
@@ -257,19 +256,28 @@ namespace MusicSearch.apiService
 
         public List<Artist> SearchArtists(string reqest, int numPage=1)
         {
-            SearchArtistsMehod(reqest, numPage);
+            if (onlineOffline == "online")
+                SearchArtistsMehod(reqest, numPage);
+            else
+                GetAuthorsFromDB(numPage);
             return authors;
         }
 
         public List<Album> SearchAlbums(string reqest, int numPage = 1)
         {
-            SearchAlbumsMethod(reqest,numPage);
+            if (onlineOffline == "online")
+                SearchAlbumsMethod(reqest, numPage);
+            else
+                GetAlbumsFromDB(reqest,numPage);
             return albums;
         }
 
         public List<Track> SearchTracks(string reqest, int numPage = 1)
-        {      
-            SearchTracksMethod(reqest, numPage);
+        {
+            if (onlineOffline == "online")
+                SearchTracksMethod(reqest, numPage);
+            else
+                GetTracksFromDB(reqest,null,numPage);
             return tracks;
         }
        
@@ -284,27 +292,37 @@ namespace MusicSearch.apiService
             return win1251.GetString(win1251Bytes);
         }
 
-       public void GetAuthorsFromDB(int numPage)
+       public void GetAuthorsFromDB(int numPage, string reqest = null)
         {
+            if(reqest!=null)
+                authors.AddRange(dbContext.Artists.Where(item => item.Id < numPage * 25 && item.Name == reqest).ToList());
+            else
             authors.AddRange(dbContext.Artists.Where(item => item.Id < numPage * 25).ToList());
         }
 
-        public void GetAlbumsFromDB(string albums,int numPage)
+        public void GetAlbumsFromDB(string author,int numPage)
         {
-
+            albums.AddRange(dbContext.Albums.Where(item => item.Id < numPage * 25 && item.ArtistAlbum == author).ToList());
         }
 
         public void GetTracksFromDB(string author, string album, int numPage)
         {
-
+            if(album!=null)
+            tracks.AddRange(dbContext.Tracks
+                .Where(item => item.Id < numPage * 25 && item.Album == album && item.Artist == author)
+                .ToList());
+            else
+                tracks.AddRange(dbContext.Tracks
+               .Where(item => (item.Album == author || item.Artist == author))
+               .ToList());
         }
 
-        //public void StartTimer()
-        //{
-        //    int num = 0;
-        //    TimerCallback tm = new TimerCallback(JastDoIt);
-        //    Timer timer = new Timer(tm, num, 0, 300000);//300000
-        //}
+        public void StartTimer()
+        {
+            int num = 0;
+            TimerCallback tm = new TimerCallback(JastDoIt);
+            Timer timer = new Timer(tm, num, 0, 300000);//300000
+        }
 
         //public void CreateTaskRunner()
         //{          
@@ -331,7 +349,7 @@ namespace MusicSearch.apiService
             offlinePath = path;
         }
 
-        public void JastDoIt()
+        public void JastDoIt(object obj)
         {            
             resultSearchingFiles = new List<string>();
             resultSearchingFiles.Clear();
@@ -381,10 +399,30 @@ namespace MusicSearch.apiService
                 Duration = audio.Properties.Duration.Seconds,
                 Url = file
             };
-            
-            if(dbContext.Tracks.Where(elem => elem.Url==file).Count() == 0)
+
+            //dbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE [Tracks]");
+            if (dbContext.Tracks.Where(elem => elem.Url == file).Count() == 0)
+            {
+                var updataTrack = SearchTracks(track.Artist + " " + track.Name).First();
+                track.ImageLarge = updataTrack.ImageLarge;
+                track.Listeners = updataTrack.Listeners;
                 dbContext.Tracks.Add(track);
-            dbContext.SaveChanges();
+                dbContext.SaveChanges();
+            }
+
+            var updataAlbum = SearchAlbums(track.Album).Where(item => item.ArtistAlbum == track.Artist).First();
+            if (dbContext.Albums.Where(elem => elem.Name == updataAlbum.Name).Count() == 0)
+            {               
+                dbContext.Albums.Add(updataAlbum);
+                dbContext.SaveChanges();
+            }
+
+            var updataArtist = SearchArtists(track.Artist).First();
+            if (dbContext.Artists.Where(elem => elem.Name == updataArtist.Name).Count() == 0)
+            {               
+                dbContext.Artists.Add(updataArtist);
+                dbContext.SaveChanges();
+            }           
         }
 
     }

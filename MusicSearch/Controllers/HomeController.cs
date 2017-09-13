@@ -19,8 +19,9 @@ namespace MusicSearch.Controllers
             myService = new MyService();
         }
 
-        public ActionResult Index(int ? author)
+        public ActionResult Index(int ? author, string onOff = "online")
         {
+            myService.SetOnlineOffline(onOff);
             int numPage = author ?? 1;
             if(Request.IsAjaxRequest())
             {
@@ -29,8 +30,9 @@ namespace MusicSearch.Controllers
             return View(myService.TopAuthorsForView(numPage));
         }
        
-        public ActionResult Albums(int? numPage,string author = "")
+        public ActionResult Albums(int? numPage,string author = "", string onOff = "online")
         {
+            myService.SetOnlineOffline(onOff);
             int tempPage = numPage ?? 1;
             if (Request.IsAjaxRequest())
             {
@@ -39,14 +41,15 @@ namespace MusicSearch.Controllers
             return View(myService.TopAlbumsForView(author,tempPage));
         }
 
-        public ActionResult Tracks(string album, string author)
-        {            
+        public ActionResult Tracks(string album, string author, string onOff = "online")
+        {
+            myService.SetOnlineOffline(onOff);
             return View(myService.TracksOfAlbum(author, album));
         }
 
-        public ActionResult Search(int? numPage, string reqest = "")
+        public ActionResult Search(int? numPage, string reqest = "", string onOff = "online")
         {
-
+            myService.SetOnlineOffline(onOff);
             if (reqest != "")
             {
                 int tempPage = numPage ?? 1;
@@ -66,14 +69,12 @@ namespace MusicSearch.Controllers
                 return View(searchresult);
             }
             return View();
-        }
+        }      
 
-        public void OnlineOffline(int author)
+        public ActionResult MyAudio()
         {
-            if (author == 0)
-                myService.SetOnlineOffline("online");
-            else if(author == 1)
-                myService.SetOnlineOffline("offline");
+            var file = "";
+            return File(file, "audio/mp3");
         }
     }
 }

@@ -215,6 +215,7 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\ScrollingAlbums.js" />
     <Content Include="Scripts\ScrollingArtists.js" />
+    <Content Include="Scripts\ScrollingOfflineArtist.js" />
     <Content Include="Scripts\ScrollingSearch.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

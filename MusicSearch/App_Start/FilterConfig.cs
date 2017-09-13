@@ -8,8 +8,8 @@ namespace MusicSearch
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            //MyService myService = new MyService();
-            //myService.StartTimer();
+            MyService myService = new MyService();
+            myService.StartTimer();
             filters.Add(new HandleErrorAttribute());
         }
     }
