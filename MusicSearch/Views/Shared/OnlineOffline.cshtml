@@ -1,0 +1,5 @@
+﻿<form asp-controller="Home" asp-action="SetOnOff"
+      asp-route-returnUrl="@Context.Request.Path"
+      method="post">
+    <button class="btn btn-default" name="onOff" onchange="this.form.submit();" value="Offline">Offline</button>
+</form>  

@@ -2,6 +2,7 @@
 @using System.Text.RegularExpressions;
 @{   
     var url = Server.UrlDecode(Request.Url.AbsolutePath.Replace("%20"," "));
+   
 }
 
 <html>
@@ -24,25 +25,16 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>  
-                @Html.ActionLink("Top Artists", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Online", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">              
                 <ul class="nav navbar-nav">
-                    <li style="margin-top:8px">
-                        <div class="dropdown">
-                            <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
-                                Online-offline
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a href="/Home/Index">Online</a></li>
-                                <li><a href="@Request.Url.AbsolutePath?onOff=offline">Offline</a></li>
-                            </ul>
-                        </div>
+                    <li style="margin-top:8px"> 
+                        @Html.Partial("OnlineOffline")                                                                
                     </li>
                     @for (int i = 3; i < url.Split('/').Length; i+=2)
                     {
-                         <li style="color:aliceblue">@Html.ActionLink(" " + url.Split('/')[i],    String.Join("/", url.Split('/'), 2, i - 1), "Home")</li>
+                         <li style="color:aliceblue">/ @Html.ActionLink(" " + url.Split('/')[i],    String.Join("/", url.Split('/'), 2, i - 1), "Home")</li>                        
                     }
                 </ul>
                 <div class="navbar-right" style="max-width:40%;margin-top:8px">

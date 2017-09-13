@@ -19,7 +19,7 @@ namespace MusicSearch.Controllers
             myService = new MyService();
         }
 
-        public ActionResult Index(int ? author, string onOff = "online")
+        public ActionResult Index(int ? author, string onOff = "Online")
         {
             myService.SetOnlineOffline(onOff);
             int numPage = author ?? 1;
@@ -30,7 +30,7 @@ namespace MusicSearch.Controllers
             return View(myService.TopAuthorsForView(numPage));
         }
        
-        public ActionResult Albums(int? numPage,string author = "", string onOff = "online")
+        public ActionResult Albums(int? numPage,string author = "", string onOff = "Online")
         {
             myService.SetOnlineOffline(onOff);
             int tempPage = numPage ?? 1;
@@ -41,13 +41,13 @@ namespace MusicSearch.Controllers
             return View(myService.TopAlbumsForView(author,tempPage));
         }
 
-        public ActionResult Tracks(string album, string author, string onOff = "online")
+        public ActionResult Tracks(string album, string author, string onOff = "Online")
         {
             myService.SetOnlineOffline(onOff);
             return View(myService.TracksOfAlbum(author, album));
         }
 
-        public ActionResult Search(int? numPage, string reqest = "", string onOff = "online")
+        public ActionResult Search(int? numPage, string reqest = "", string onOff = "Online")
         {
             myService.SetOnlineOffline(onOff);
             if (reqest != "")
@@ -60,8 +60,7 @@ namespace MusicSearch.Controllers
                     Tracks = myService.SearchTracks(reqest, tempPage),
                     SearchReqest = reqest
                 };
-                var reqestModel = new List<string> {reqest};
-                
+             
                 if (Request.IsAjaxRequest())
                 {
                     return PartialView("Search", searchresult);
@@ -71,10 +70,15 @@ namespace MusicSearch.Controllers
             return View();
         }      
 
-        public ActionResult MyAudio()
+        public ActionResult MyAudio(string url)
         {
-            var file = "";
+            var file = url;
             return File(file, "audio/mp3");
+        }
+
+        public ActionResult SetOnOff(string onOff, string returnUrl)
+        {
+            return Redirect(returnUrl);
         }
     }
 }

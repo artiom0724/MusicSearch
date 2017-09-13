@@ -34,14 +34,14 @@
                                 <h5>Duration: @item.Duration</h5>
                             }
                         </div>
-
-
                     </header>
-
+                    @if (item.Url != null)
+                    {
                     <audio controls>
-                        <source src="@Url.Action("myaudio")" type="audio/mp3" />
+                        <source src="@Url.Action("MyAudio","Home",new { url = item.Url })" type="audio/mp3" />
                         <p>Your browser does not support HTML 5 audio element</p>
                     </audio>
+                    }
                 </article>
             </li>
         }
