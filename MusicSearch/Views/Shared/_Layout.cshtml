@@ -2,7 +2,6 @@
 @using System.Text.RegularExpressions;
 @{   
     var url = Server.UrlDecode(Request.Url.AbsolutePath.Replace("%20"," "));
-   
 }
 
 <html>
@@ -17,6 +16,27 @@
     @Scripts.Render("~/bundles/bootstrap")
 </head>
 <body>
+    <script type="text/javascript">
+        function testOff() {
+            $.ajax({
+                type: 'GET',
+                url: document.location.pathname + "?reqest=" + document.getElementById("myreqest").innerText + "&onOff=Offline",
+                success: function (data, textstatus) {
+                    document.write(data);
+                }
+            });
+        }
+        function testOn() {
+            $.ajax({
+                type: 'GET',
+                url: document.location.pathname + "?reqest=" + document.getElementById("myreqest").innerText + "&onOff=Online",
+                success: function (data, textstatus) {
+                    document.body.innerHTML = data;
+                }
+            });
+        }
+    </script>
+
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container"  style="width:100%">
             <div class="navbar-header">               
@@ -25,25 +45,45 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>  
-                @Html.ActionLink("Online", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Top Artists", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })                              
             </div>
             <div class="navbar-collapse collapse">              
                 <ul class="nav navbar-nav">
-                    <li style="margin-top:8px"> 
-                        @Html.Partial("OnlineOffline")                                                                
-                    </li>
-                    @for (int i = 3; i < url.Split('/').Length; i+=2)
+                    @if (Request.Url.AbsolutePath.Contains("/Home/Search"))
                     {
-                         <li style="color:aliceblue">/ @Html.ActionLink(" " + url.Split('/')[i],    String.Join("/", url.Split('/'), 2, i - 1), "Home")</li>                        
+                        <li style="margin-top:8px"> <button class="btn btn-default" name="onOff" OnClick="testOn()">Online</button></li>
+                        <li style="margin-top:8px"><button class="btn btn-default" name="onOff" OnClick="testOff()">Offline</button></li>
+                    }
+                    else
+                    {
+                        <li>
+                            <form asp-controller="Home" asp-action="SetOnOff"
+                                  asp-route-returnUrl="@Context.Request.Path"
+                                  method="post"
+                                  style="margin-top:8px">
+                                <button class="btn btn-default" name="onOff" onchange="this.form.submit();" value="Online">Online</button>
+                            </form>
+                        </li>
+                        <li style="margin-top:8px">
+                            <form asp-controller="Home" asp-action="SetOnOff"
+                                  asp-route-returnUrl="@Context.Request.Path"
+                                  method="post">
+                                <button class="btn btn-default" name="onOff" onchange="this.form.submit();" value="Offline">Offline</button>
+                            </form>
+                        </li>
+                    }
+                    @for (int i = 3; i < url.Split('/').Length; i += 2)
+                    {
+                        <li style="color:aliceblue">@Html.ActionLink(" " + url.Split('/')[i], String.Join("/", url.Split('/'), 2, i - 1), "Home")</li>
                     }
                 </ul>
                 <div class="navbar-right" style="max-width:40%;margin-top:8px">
                     <div class="container" style="width:100%">      
-                        <form action="/Home/Search/Reqest" method="post" style="width:inherit">
+                        <form action="/Home/Search" method="post" style="width:inherit">
                             <div class="col-sm-12">
                                 <div id="imaginary_container">
                                     <div class="input-group stylish-input-group">
-                                        <input type="text" class="form-control" placeholder="Search" id="reqest" name="reqest">
+                                        <input type="text" class="form-control" placeholder="@ViewBag.reqest" id="reqest" name="reqest">
                                         <span class="input-group-addon">
                                             <button type="submit">
                                                 <span class="glyphicon glyphicon-search"></span>

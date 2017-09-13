@@ -21,9 +21,10 @@ namespace MusicSearch.Controllers
 
         public ActionResult Index(int ? author, string onOff = "Online")
         {
+            ViewBag.reqest = "Search";
             myService.SetOnlineOffline(onOff);
             int numPage = author ?? 1;
-            if(Request.IsAjaxRequest())
+            if(Request.IsAjaxRequest() && numPage!=1)
             {
                 return PartialView("_Items", myService.TopAuthorsForView(numPage));
             }
@@ -50,8 +51,9 @@ namespace MusicSearch.Controllers
         public ActionResult Search(int? numPage, string reqest = "", string onOff = "Online")
         {
             myService.SetOnlineOffline(onOff);
-            if (reqest != "")
+            if (reqest != "" )
             {
+                ViewBag.reqest = reqest;
                 int tempPage = numPage ?? 1;
                 var searchresult = new SearchResult()
                 {
@@ -60,14 +62,14 @@ namespace MusicSearch.Controllers
                     Tracks = myService.SearchTracks(reqest, tempPage),
                     SearchReqest = reqest
                 };
-             
-                if (Request.IsAjaxRequest())
+
+                if (Request.IsAjaxRequest() && numPage!=null)
                 {
                     return PartialView("Search", searchresult);
                 }
                 return View(searchresult);
-            }
-            return View();
+            }           
+            return View();          
         }      
 
         public ActionResult MyAudio(string url)

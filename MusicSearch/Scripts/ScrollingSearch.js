@@ -13,7 +13,7 @@
 
             $.ajax({
                 type: 'GET',
-                url: document.location.pathname+"?reqest="+ document.getElementById("myreqest").innerText + "&numPage="+ page.toString(),
+                url: document.location.pathname + "?reqest=" + document.getElementById("myreqest").innerText + "&numPage=" + page.toString(),
                 success: function (data, textstatus) {
                     if (data != '') {
                         $("#scrolList").append(data);
@@ -37,4 +37,4 @@
             _isScroll = false;
         }
     });
-})
+});
