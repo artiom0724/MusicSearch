@@ -36,6 +36,9 @@ namespace MusicSearch.apiService
             resultSearchingFiles = new List<string>();
             resultSearchingFiles.Clear();
             SearchDirectories(new string[] { offlinePath });
+
+            DeleteDeletingMusic();
+
             ParseInDB();
         }
 
@@ -60,6 +63,24 @@ namespace MusicSearch.apiService
                 }
             }
 
+        }
+
+        public void DeleteDeletingMusic()
+        {
+            var deleted = dbContext.Tracks.Where(elem => IsNonInDirectory(elem));
+            foreach (var item in deleted)
+                dbContext.Tracks.Remove(item);
+            dbContext.SaveChanges();
+        }
+
+        public bool IsNonInDirectory(Track track)
+        {
+            foreach (var item in resultSearchingFiles)
+            {
+                if (track.Url == item)
+                    return false;
+            }
+            return true;
         }
 
         public void ParseInDB()
