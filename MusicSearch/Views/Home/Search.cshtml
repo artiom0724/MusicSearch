@@ -6,12 +6,6 @@
 
 @if (Model != null)
 {
-    <div id="loginBlock">
-        <p id="newTime"></p>
-        <input id="btnLogin" type="button" value="Remember" />
-        <input id="btnRun" type="button" value="Run" onclick="a()"/>
-    </div>
-   
     <h3 id="myreqest">@Model.SearchReqest</h3>
     <div class="row" style="max-height:20px">
         <div class="col-md-4"><h3>Artists:</h3></div>
@@ -38,14 +32,18 @@
         </div>
         <hr/>
     </div>
+    if (Model.Albums.Count > 20 || Model.Authors.Count > 20 || Model.Tracks.Count > 20)
+    {
+        <img id="loading" src="http://www.playcast.ru/uploads/2016/02/23/17479109.gif" style="margin-left:40%; margin-right:40%" height="80">
+    }    
 }
-<img id="loading" src="http://www.playcast.ru/uploads/2016/02/23/17479109.gif" style="margin-left:40%; margin-right:40%" height="80">
+else
+{
+    <h1 id="message"> No more search result at site...</h1>
+}
 
 @Scripts.Render("~/bundles/jquery")
 @Scripts.Render("~/bundles/bootstrap")
 @Scripts.Render("~/Scripts/jquery-3.1.1.js")
-@Scripts.Render("~/Scripts/jquery.signalR-2.2.2.js")
-@Scripts.Render("~/signalr/hubs")
-@Scripts.Render("~/Scripts/util.js")
 @Scripts.Render("~/Scripts/ScrollingSearch.js")
 

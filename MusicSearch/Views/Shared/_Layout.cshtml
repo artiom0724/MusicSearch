@@ -22,7 +22,8 @@
                 type: 'GET',
                 url: document.location.pathname + "?reqest=" + document.getElementById("myreqest").innerText + "&onOff=Offline",
                 success: function (data, textstatus) {
-                    document.write(data);
+                    document.body.innerHTML = "";
+                    document.body.innerHTML = data;
                 }
             });
         }
@@ -31,6 +32,7 @@
                 type: 'GET',
                 url: document.location.pathname + "?reqest=" + document.getElementById("myreqest").innerText + "&onOff=Online",
                 success: function (data, textstatus) {
+                    document.body.innerHTML = "";
                     document.body.innerHTML = data;
                 }
             });

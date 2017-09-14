@@ -29,6 +29,7 @@
     }
 
     $(window).scroll(function () {
+        $('div#loading').hide();
         if (_isScroll == false) {
             _isScroll = true;
             if ($(window).scrollTop() == $(document).height() - $(window).height()) {

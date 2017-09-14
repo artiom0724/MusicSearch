@@ -59,8 +59,7 @@ namespace MusicSearch.apiService
             authors = new List<Artist>();
             albums = new List<Album>();
             tracks = new List<Track>();
-            onlineOffline = "Online";
-            CreateTaskRunner();
+            onlineOffline = "Online";           
         }
         public void CreateTaskRunner()
         {
@@ -73,7 +72,8 @@ namespace MusicSearch.apiService
                 timeTrigger.Repetition.Interval = TimeSpan.FromMinutes(5);
                 td.Triggers.Add(timeTrigger);
 
-                td.Actions.Add(new ExecAction(@"C:/mySearcher.exe " + offlinePath, null, null));
+
+                td.Actions.Add(new ExecAction(@"C:/Users/a.zubel/MusicSearch/MusicSearch/apiService/mySearcher/mySearcher.exe ", @"C:\Users\a.zubel\Music"));
                 ts.RootFolder.RegisterTaskDefinition(@"TestMyTasck", td);
             }
         }
