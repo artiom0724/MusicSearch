@@ -170,6 +170,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Album.cs" />
+    <Compile Include="Models\AllAlbums.cs" />
+    <Compile Include="Models\AllArtists.cs" />
     <Compile Include="Models\Artist.cs" />
     <Compile Include="Models\MyDbContext.cs" />
     <Compile Include="Models\SearchResult.cs" />

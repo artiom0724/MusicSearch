@@ -1,13 +1,27 @@
 ﻿@using MusicSearch.Models
-@model List<Artist>
+@model AllArtists
 @{
     ViewBag.Title = "Artists";
 }
 
-<div id="scrolList">
-    @Html.Partial("_Items")
-</div>
-
+<div class="row">
+    <div class="col-md-12">
+        <h3>Local:</h3>
+        @if (Model.LocalArtists != null)
+        {
+            <div id="localList">
+                @Html.Partial("_Items", Model.LocalArtists);
+            </div>
+        }
+    </div>
+    <hr />
+    <div class="col-md-12">
+        <h3>Online:</h3>
+        <div id="scrolList">
+            @Html.Partial("_Items", Model.OnlineArtists)
+        </div>
+    </div>
+</div>   
 @Scripts.Render("~/bundles/jquery")
 @Scripts.Render("~/bundles/bootstrap")
 <script src="~/Scripts/ScrollingArtists.js"></script>

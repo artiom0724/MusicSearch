@@ -7,35 +7,18 @@
 @if (Model != null)
 {
     <h3 id="myreqest">@Model.SearchReqest</h3>
-    <div class="row" style="max-height:20px">
-        <div class="col-md-4"><h3>Artists:</h3></div>
-        <div class="col-md-4"><h3>Albums:</h3></div>
-        <div class="col-md-2" style="min-height:inherit"><h3>Tracks:</h3></div>
+    <h3>Artists:</h3>
+    <div id="scrolListArtists">
+        @Html.Partial("_Items", Model.Authors)
     </div>
-    <div id="scrolList">
-        <div class="row">
-            <div class="col-md-4">
-                <div id="scrolListArtists">
-                    @Html.Partial("_Items", Model.Authors)
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div id="scrolListAlbums">
-                    @Html.Partial("_Albums", Model.Albums)
-                </div>
-            </div>
-            <div class="col-md-2" style="max-height:100%">
-                <div id="scrolListTracks">
-                    @Html.Partial("Tracks", Model.Tracks)
-                </div>
-            </div>
-        </div>
-        <hr/>
+    <h3>Albums:</h3>
+    <div id="scrolListAlbums">
+        @Html.Partial("_Albums", Model.Albums)
     </div>
-    if (Model.Albums.Count > 20 || Model.Authors.Count > 20 || Model.Tracks.Count > 20)
-    {
-        <img id="loading" src="http://www.playcast.ru/uploads/2016/02/23/17479109.gif" style="margin-left:40%; margin-right:40%" height="80">
-    }    
+    <h3>Tracks:</h3>
+    <div id="scrolListTracks">
+        @Html.Partial("Tracks", Model.Tracks)
+    </div>
 }
 else
 {

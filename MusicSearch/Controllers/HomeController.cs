@@ -22,30 +22,50 @@ namespace MusicSearch.Controllers
         public ActionResult Index(int ? author, string onOff = "Online")
         {
             ViewBag.reqest = "Search";
-            myService.SetOnlineOffline(onOff);
             int numPage = author ?? 1;
+            myService.SetOnlineOffline(onOff);
+            AllArtists allArtists = new AllArtists();
+            allArtists.OnlineArtists = myService.TopAuthorsForView(numPage);
+            if (numPage == 1)
+            {
+                myService.SetOnlineOffline("Offline");
+                allArtists.LocalArtists = myService.TopAuthorsForView(numPage);
+            }
+            
             if(Request.IsAjaxRequest() && numPage!=1)
             {
-                return PartialView("_Items", myService.TopAuthorsForView(numPage));
+                return PartialView("_Items", allArtists.OnlineArtists);
             }
-            return View(myService.TopAuthorsForView(numPage));
+            return View(allArtists);
         }
        
         public ActionResult Albums(int? numPage,string author = "", string onOff = "Online")
         {
             myService.SetOnlineOffline(onOff);
             int tempPage = numPage ?? 1;
+            AllAlbums allAlbums = new AllAlbums();
+            allAlbums.OnlineAlbums = myService.TopAlbumsForView(author, tempPage);
+            if (numPage == 1)
+            {
+                myService.SetOnlineOffline("Offline");
+                allAlbums.LocalAlbums = myService.TopAlbumsForView(author, tempPage);
+            }
+
             if (Request.IsAjaxRequest())
             {
-                return PartialView("_Albums", myService.TopAlbumsForView(author,tempPage));
+                return PartialView("_Albums", allAlbums.OnlineAlbums);
             }
-            return View(myService.TopAlbumsForView(author,tempPage));
+            return View(allAlbums);
         }
 
         public ActionResult Tracks(string album, string author, string onOff = "Online")
         {
-            myService.SetOnlineOffline(onOff);
-            return View(myService.TracksOfAlbum(author, album));
+            List<Track> tracks = new List<Track>();
+            myService.SetOnlineOffline("Offline");
+            tracks.AddRange(myService.TracksOfAlbum(author, album));
+            myService.SetOnlineOffline("Online");
+            tracks.AddRange(myService.TracksOfAlbum(author, album));
+            return View(tracks);
         }
 
         public ActionResult Search(int? numPage, string reqest = "", string onOff = "Online")
