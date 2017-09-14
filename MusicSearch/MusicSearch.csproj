@@ -177,14 +177,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="apiService\mySearcher\EntityFramework.dll" />
-    <Content Include="apiService\mySearcher\EntityFramework.SqlServer.dll" />
-    <Content Include="apiService\mySearcher\EntityFramework.SqlServer.xml" />
-    <Content Include="apiService\mySearcher\EntityFramework.xml" />
-    <Content Include="apiService\mySearcher\mySearcher.exe" />
-    <Content Include="apiService\mySearcher\mySearcher.pdb" />
-    <Content Include="apiService\mySearcher\policy.2.0.taglib-sharp.dll" />
-    <Content Include="apiService\mySearcher\taglib-sharp.dll" />
     <Content Include="App_Data\TestDb.mdf" />
     <Content Include="App_Data\TestDb_log.ldf">
       <DependentUpon>TestDb.mdf</DependentUpon>
@@ -209,8 +201,6 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
-    <Content Include="apiService\mySearcher\mySearcher.exe.config" />
-    <Content Include="apiService\mySearcher\policy.2.0.taglib-sharp.config" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
