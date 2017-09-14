@@ -73,7 +73,7 @@ namespace MusicSearch.apiService
                 timeTrigger.Repetition.Interval = TimeSpan.FromMinutes(5);
                 td.Triggers.Add(timeTrigger);
 
-                td.Actions.Add(new ExecAction(@"C:\Users\a.zubel\MusicSearch\MusicSearch\apiService\mySearcher\mySearcher.exe " + offlinePath, null, null));
+                td.Actions.Add(new ExecAction(@"C:/mySearcher.exe " + offlinePath, null, null));
                 ts.RootFolder.RegisterTaskDefinition(@"TestMyTasck", td);
             }
         }

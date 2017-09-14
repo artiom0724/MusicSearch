@@ -5,6 +5,7 @@
 }
 @if (Model != null && Model.Count != 0)
 {
+    
     <ul class="media-list">
         @foreach (var item in Model)
         {
@@ -15,7 +16,7 @@
                             <a href="#">
                                 @if (item.ImageLarge != null)
                                 {
-                                    <img src="@item.ImageLarge" height="50" width="50" />
+                                    <img src="@item.ImageLarge" height="50" width="50" id="runMusic"/>
                                 }
                                 else
                                 {
@@ -36,7 +37,7 @@
                         </div>
                     </header>
                     @if (item.Url != null)
-                    {
+                    {                       
                     <audio controls>
                         <source src="@Url.Action("MyAudio","Home",new { url = item.Url })" type="audio/mp3" />
                         <p>Your browser does not support HTML 5 audio element</p>
@@ -49,7 +50,8 @@
 }
 else
 {
-    <h1> No tracks at site...</h1>
+    <h1  id="message"> No tracks at site...</h1>
 }
+
 
 
