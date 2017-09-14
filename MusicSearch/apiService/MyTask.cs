@@ -67,10 +67,13 @@ namespace MusicSearch.apiService
 
         public void DeleteDeletingMusic()
         {
-            var deleted = dbContext.Tracks.Where(elem => IsNonInDirectory(elem));
-            foreach (var item in deleted)
-                dbContext.Tracks.Remove(item);
-            dbContext.SaveChanges();
+            List<Track> deleted = new List<Track>();
+            deleted.AddRange(dbContext.Tracks.ToList().Where(elem => IsNonInDirectory(elem)));
+            if (deleted.Count() > 0)
+            {
+                dbContext.Tracks.RemoveRange(deleted);
+                dbContext.SaveChanges();
+            }
         }
 
         public bool IsNonInDirectory(Track track)

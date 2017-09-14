@@ -53,8 +53,8 @@
                 <ul class="nav navbar-nav">
                     @if (Request.Url.AbsolutePath.Contains("/Home/Search"))
                     {
-                        <li style="margin-top:8px"> <button class="btn btn-default" name="onOff" OnClick="testOn()">Online</button></li>
-                        <li style="margin-top:8px"><button class="btn btn-default" name="onOff" OnClick="testOff()">Offline</button></li>
+                        <li style="margin-top:8px"> <button class="btn btn-default" name="onOff" onclick="testOn()">Online</button></li>
+                        <li style="margin-top:8px"><button class="btn btn-default" name="onOff" onclick="testOff()">Offline</button></li>
                     }
                     else
                     {
