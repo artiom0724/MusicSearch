@@ -24,7 +24,7 @@
                     @Html.Partial("_Albums", Model.Albums)
                 </div>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2" style="max-height:100%">
                 <div id="scrolListTracks">
                     @Html.Partial("Tracks", Model.Tracks)
                 </div>
@@ -46,4 +46,3 @@ else
 @Scripts.Render("~/bundles/bootstrap")
 @Scripts.Render("~/Scripts/jquery-3.1.1.js")
 @Scripts.Render("~/Scripts/ScrollingSearch.js")
-

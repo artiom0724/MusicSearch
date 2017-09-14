@@ -83,6 +83,13 @@ namespace MusicSearch.apiService
             };
 
             //dbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE [Tracks]");
+            UpDataTrack(file, track);
+            UpDataAlbum(track);
+            UpDataArtist(track);           
+        }
+
+        public void UpDataTrack(string file, Track track)
+        {
             if (dbContext.Tracks.Where(elem => elem.Url == file).Count() == 0)
             {
                 var updataTrack = SearchTracks(track.Artist + " " + track.Name).First();
@@ -91,14 +98,20 @@ namespace MusicSearch.apiService
                 dbContext.Tracks.Add(track);
                 dbContext.SaveChanges();
             }
+        }
 
+        public void UpDataAlbum(Track track)
+        {
             var updataAlbum = SearchAlbums(track.Album).Where(item => item.ArtistAlbum == track.Artist).First();
             if (dbContext.Albums.Where(elem => elem.Name == updataAlbum.Name).Count() == 0)
             {
                 dbContext.Albums.Add(updataAlbum);
                 dbContext.SaveChanges();
             }
+        }
 
+        public void UpDataArtist(Track track)
+        {
             var updataArtist = SearchArtists(track.Artist).First();
             if (dbContext.Artists.Where(elem => elem.Name == updataArtist.Name).Count() == 0)
             {

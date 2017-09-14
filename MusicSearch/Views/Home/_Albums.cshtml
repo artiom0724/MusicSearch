@@ -8,7 +8,14 @@
             <a href="/Home/Albums/@item.ArtistAlbum/Tracks/@item.Name">
                 <div class="col-md-2">
                     <div class="image">
-                        <img src="@item.ImageLarge" alt="" width="300" height="300" />
+                        @if (item.ImageLarge != "")
+                        {
+                            <img src="@item.ImageLarge" alt="" width="300" height="300" />
+                        }
+                        else
+                        {
+                            <img src="http://pixelbrush.ru/uploads/posts/2010-06/1277568875_vinil.jpg" alt="" width="300" height="300" />
+                        }
                         <h2>@item.Name<br />Playcount: @item.Playcount</h2>
                     </div>
                 </div>

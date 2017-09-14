@@ -61,6 +61,7 @@ namespace MusicSearch.apiService
             tracks = new List<Track>();
             onlineOffline = "Online";           
         }
+
         public void CreateTaskRunner()
         {
             using (TaskService ts = new TaskService())
@@ -146,7 +147,6 @@ namespace MusicSearch.apiService
                         ReqestForTracks(node, reqestSearch);
                     break;
             }
-
         }
 
         public void GetTopOfAuthors(int numPage, string country="belarus")
@@ -157,8 +157,7 @@ namespace MusicSearch.apiService
         }
 
         public void ReqestForArtists(XElement node)
-        {
-            
+        { 
             Artist author = new Artist();
             author.ImageLarge = ReqestForNode(node, "image",new string[]{ "size"}, new string[] { "large" });
             author.Name =EncodingFromUTF8toWin1251((ReqestForNode(node, "name"))) ;
@@ -210,8 +209,7 @@ namespace MusicSearch.apiService
         }
 
         public void SearchArtistsMehod(string reqest, int numPage)
-        {
-          
+        {  
             XDocument document = XDocument.Parse(
                 SetOptions(methods["SearchArtists"], numPage, null, reqest, null).Replace("opensearch:",""));
             ReqestMethod(document,"artist");
@@ -304,7 +302,7 @@ namespace MusicSearch.apiService
             return win1251.GetString(win1251Bytes);
         }
 
-       public void GetAuthorsFromDB(int numPage, string reqest = null)
+        public void GetAuthorsFromDB(int numPage, string reqest = null)
         {
             if(reqest!=null)
                 authors.AddRange(dbContext.Artists.Where(item => item.Id < numPage * 25 && item.Name == reqest).ToList());
