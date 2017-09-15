@@ -28,13 +28,13 @@
         }
     }
 
-    $(window).scroll(function () {
-        if (_isScroll == false) {
-            _isScroll = true;
-            if ($(window).scrollTop() == $(document).height() - $(window).height()) {
-                loadItems();
-            }
-            _isScroll = false;
-        }
-    });
+    //$(window).scroll(function () {
+    //    if (_isScroll == false) {
+    //        _isScroll = true;
+    //        if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+    //            loadItems();
+    //        }
+    //        _isScroll = false;
+    //    }
+    //});
 });

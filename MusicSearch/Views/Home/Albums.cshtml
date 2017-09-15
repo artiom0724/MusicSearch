@@ -5,19 +5,29 @@
 }
 <link rel="stylesheet" type="text/css" href="~/Content/Style.css" />
 
-<h3>Local:</h3>
-@if (Model.LocalAlbums != null)
-{
-<div >
-    @Html.Partial("_Albums", Model.LocalAlbums)
-</div>
-}
-<h3>Online:</h3>
-<div id="scrolList">
-    @Html.Partial("_Albums", Model.OnlineAlbums)
-</div>
 
-
+<div class="row">
+    @if (Model.LocalAlbums != null)
+    {
+        <div class="col-md-12">
+            <h3>Local:</h3>
+            <div id="localList">
+                @Html.Partial("_Albums", Model.LocalAlbums)
+            </div>
+        </div>
+    }
+    else
+    {
+        <h3>No Local Albums...</h3>
+    }
+    <div class="col-md-12">
+        <h3>Online:</h3>
+        <div id="scrolList">
+            @Html.Partial("_Albums", Model.OnlineAlbums)
+        </div>
+    </div>
+</div>
+<img id="loading" src="http://www.playcast.ru/uploads/2016/02/23/17479109.gif" style="width:auto;margin-left:40%; margin-right:40%" height="80">
 @Scripts.Render("~/bundles/jquery")
 @Scripts.Render("~/bundles/bootstrap")
 <script src="~/Scripts/ScrollingAlbums.js"></script>

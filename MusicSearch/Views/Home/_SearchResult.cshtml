@@ -1,0 +1,22 @@
+﻿@using MusicSearch.Models
+@model LocalOnline
+@if (Model != null)
+{
+    <h3>Artists:</h3>
+    <div id="scrolListArtists">
+        @Html.Partial("_Items", Model.Artists)
+    </div>
+
+    <h3>Albums:</h3>
+    <div id="scrolListAlbums">
+        @Html.Partial("_Albums", Model.Albums)
+    </div>
+    <h3>Tracks:</h3>
+    <div id="scrolListTracks">
+        @Html.Partial("Tracks", Model.Tracks)
+    </div>
+}
+else
+{
+    <h1 id="message"> No more search result at site...</h1>
+}

@@ -73,7 +73,7 @@ namespace MusicSearch.apiService
                 timeTrigger.Repetition.Interval = TimeSpan.FromMinutes(5);
                 td.Triggers.Add(timeTrigger);
 
-                td.Actions.Add(new ExecAction(@"C:/Users/a.zubel/MusicSearch/mySearcher/bin/Debug/mySearcher.exe ", @"C:\Users\a.zubel\Music"));
+                td.Actions.Add(new ExecAction(@"C:/Users/a.zubel/MusicSearch/mySearcher/bin/Debug/mySearcher.exe ", offlinePath));
                 ts.RootFolder.RegisterTaskDefinition(@"TestMyTasck", td);
             }
         }
@@ -230,6 +230,7 @@ namespace MusicSearch.apiService
 
         public List<Artist> TopAuthorsForView(int numPage)
         {
+            authors.Clear();
             if (onlineOffline == "Online")
                 GetTopOfAuthors(numPage);
             else
@@ -239,6 +240,7 @@ namespace MusicSearch.apiService
 
         public List<Album> TopAlbumsForView(string author, int numPage = 1)
         {
+            albums.Clear();
             if (author != "")
             {
                 if (onlineOffline == "Online")
@@ -252,6 +254,7 @@ namespace MusicSearch.apiService
 
         public List<Track> TracksOfAlbum(string author, string album, int numPage = 1)
         {
+            albums.Clear();
             if (album != "" && author != "")
             {
                 if (onlineOffline == "Online")
@@ -265,15 +268,17 @@ namespace MusicSearch.apiService
 
         public List<Artist> SearchArtists(string reqest, int numPage=1)
         {
+            authors.Clear();
             if (onlineOffline == "Online")
                 SearchArtistsMehod(reqest, numPage);
             else
-                GetAuthorsFromDB(numPage);
+                GetAuthorsFromDB(numPage, reqest);
             return authors;
         }
 
         public List<Album> SearchAlbums(string reqest, int numPage = 1)
         {
+            albums.Clear();
             if (onlineOffline == "Online")
                 SearchAlbumsMethod(reqest, numPage);
             else
@@ -283,6 +288,7 @@ namespace MusicSearch.apiService
 
         public List<Track> SearchTracks(string reqest, int numPage = 1)
         {
+            tracks.Clear();
             if (onlineOffline == "Online")
                 SearchTracksMethod(reqest, numPage);
             else
@@ -304,14 +310,14 @@ namespace MusicSearch.apiService
         public void GetAuthorsFromDB(int numPage, string reqest = null)
         {
             if(reqest!=null)
-                authors.AddRange(dbContext.Artists.Where(item => item.Id < numPage * 25 && item.Name == reqest).ToList());
+                authors.AddRange(dbContext.Artists.Where(item => item.Name == reqest).ToList());
             else
-            authors.AddRange(dbContext.Artists.Where(item => item.Id < numPage * 25).ToList());
+            authors.AddRange(dbContext.Artists.ToList());
         }
 
         public void GetAlbumsFromDB(string author,int numPage)
         {
-            albums.AddRange(dbContext.Albums.Where(item => item.Id < numPage * 25 && item.Name == author).ToList());
+            albums.AddRange(dbContext.Albums.Where(item => item.ArtistAlbum == author).ToList());
         }
 
         public void GetTracksFromDB(string author, string album, int numPage)

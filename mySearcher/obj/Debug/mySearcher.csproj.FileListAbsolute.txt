@@ -38,3 +38,10 @@ C:\Users\a.zubel\MusicSearch\mySearcher\obj\Debug\mySearcher.csprojResolveAssemb
 C:\Users\a.zubel\MusicSearch\mySearcher\obj\Debug\mySearcher.csproj.CoreCompileInputs.cache
 C:\Users\a.zubel\MusicSearch\mySearcher\obj\Debug\mySearcher.exe
 C:\Users\a.zubel\MusicSearch\mySearcher\obj\Debug\mySearcher.pdb
+C:\Users\a.zubel\MusicSearch\mySearcher\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\a.zubel\MusicSearch\mySearcher\bin\Debug\WebGrease.dll
+C:\Users\a.zubel\MusicSearch\mySearcher\bin\Debug\Antlr3.Runtime.dll
+C:\Users\a.zubel\MusicSearch\mySearcher\bin\Debug\Newtonsoft.Json.dll
+C:\Users\a.zubel\MusicSearch\mySearcher\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\a.zubel\MusicSearch\mySearcher\bin\Debug\Antlr3.Runtime.pdb
+C:\Users\a.zubel\MusicSearch\mySearcher\bin\Debug\Newtonsoft.Json.xml

@@ -7,6 +7,11 @@ namespace MusicSearch.Models
 {
     public class AllArtists
     {
+        public AllArtists()
+        {
+            LocalArtists = new List<Artist>();
+            OnlineArtists = new List<Artist>();
+        }
         public List<Artist> LocalArtists { get; set; }
         public List<Artist> OnlineArtists { get; set; }
     }

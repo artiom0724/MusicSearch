@@ -33,6 +33,13 @@ namespace MusicSearch.apiService
 
         public void JastDoIt(object obj = null)
         {
+            //dbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE [Tracks]");
+            //dbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE [Albums]");
+            //dbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE [Artists]");
+
+            //dbContext.SaveChanges();
+            //return;
+
             resultSearchingFiles = new List<string>();
             resultSearchingFiles.Clear();
             SearchDirectories(new string[] { offlinePath });
@@ -101,12 +108,11 @@ namespace MusicSearch.apiService
             {
                 Artist = String.Join(",", audio.Tag.Performers),
                 Name = audio.Tag.Title,
-                Album = audio.Tag.Album,
                 Duration = audio.Properties.Duration.Seconds,
                 Url = file
             };
-
-            //dbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE [Tracks]");
+            if (audio.Tag.Album != null)
+                track.Album = audio.Tag.Album;            
             UpDataTrack(file, track);
             UpDataAlbum(track);
             UpDataArtist(track);           
@@ -116,9 +122,11 @@ namespace MusicSearch.apiService
         {
             if (dbContext.Tracks.Where(elem => elem.Url == file).Count() == 0)
             {
-                var updataTrack = SearchTracks(track.Artist + " " + track.Name).First();
+                var updataTrack = SearchTracks(track.Artist + " " + track.Name.Split(' ').First()).First();
                 track.ImageLarge = updataTrack.ImageLarge;
                 track.Listeners = updataTrack.Listeners;
+                if (track.Album == null)                   
+                     track.Album = updataTrack.Album;
                 dbContext.Tracks.Add(track);
                 dbContext.SaveChanges();
             }
@@ -126,7 +134,12 @@ namespace MusicSearch.apiService
 
         public void UpDataAlbum(Track track)
         {
-            var updataAlbum = SearchAlbums(track.Album).Where(item => item.ArtistAlbum == track.Artist).First();
+            if (track.Album == null)
+                track.Album = track.Artist;
+            var getdataAlbum = SearchAlbums(track.Album).Where(item => item.Name == track.Album);
+            if (getdataAlbum.Count() == 0)
+                return;
+            var updataAlbum = getdataAlbum.First();
             if (dbContext.Albums.Where(elem => elem.Name == updataAlbum.Name).Count() == 0)
             {
                 dbContext.Albums.Add(updataAlbum);

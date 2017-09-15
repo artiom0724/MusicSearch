@@ -19,17 +19,17 @@ namespace MusicSearch.Controllers
             myService = new MyService();
         }
 
-        public ActionResult Index(int ? author, string onOff = "Online")
+        public ActionResult Index(int ? author)
         {
             ViewBag.reqest = "Search";
             int numPage = author ?? 1;
-            myService.SetOnlineOffline(onOff);
+            myService.SetOnlineOffline("Online");
             AllArtists allArtists = new AllArtists();
-            allArtists.OnlineArtists = myService.TopAuthorsForView(numPage);
+            allArtists.OnlineArtists.AddRange(myService.TopAuthorsForView(numPage));
             if (numPage == 1)
             {
                 myService.SetOnlineOffline("Offline");
-                allArtists.LocalArtists = myService.TopAuthorsForView(numPage);
+                allArtists.LocalArtists.AddRange(myService.TopAuthorsForView(numPage));
             }
             
             if(Request.IsAjaxRequest() && numPage!=1)
@@ -39,16 +39,16 @@ namespace MusicSearch.Controllers
             return View(allArtists);
         }
        
-        public ActionResult Albums(int? numPage,string author = "", string onOff = "Online")
+        public ActionResult Albums(int? numPage,string author = "")
         {
-            myService.SetOnlineOffline(onOff);
+            myService.SetOnlineOffline("Online");
             int tempPage = numPage ?? 1;
             AllAlbums allAlbums = new AllAlbums();
-            allAlbums.OnlineAlbums = myService.TopAlbumsForView(author, tempPage);
-            if (numPage == 1)
+            allAlbums.OnlineAlbums.AddRange(myService.TopAlbumsForView(author, tempPage));
+            if (tempPage == 1)
             {
                 myService.SetOnlineOffline("Offline");
-                allAlbums.LocalAlbums = myService.TopAlbumsForView(author, tempPage);
+                allAlbums.LocalAlbums.AddRange(myService.TopAlbumsForView(author, tempPage));
             }
 
             if (Request.IsAjaxRequest())
@@ -58,8 +58,10 @@ namespace MusicSearch.Controllers
             return View(allAlbums);
         }
 
-        public ActionResult Tracks(string album, string author, string onOff = "Online")
+        public ActionResult Tracks(string album, string author)
         {
+            if (album == null)
+                return View();
             List<Track> tracks = new List<Track>();
             myService.SetOnlineOffline("Offline");
             tracks.AddRange(myService.TracksOfAlbum(author, album));
@@ -68,29 +70,37 @@ namespace MusicSearch.Controllers
             return View(tracks);
         }
 
-        public ActionResult Search(int? numPage, string reqest = "", string onOff = "Online")
-        {
-            myService.SetOnlineOffline(onOff);
-            if (reqest != "" )
+        public ActionResult Search(int? numPage, string reqest = "")
+        {           
+            if (reqest != "")
             {
                 ViewBag.reqest = reqest;
                 int tempPage = numPage ?? 1;
                 var searchresult = new SearchResult()
                 {
-                    Authors = myService.SearchArtists(reqest, tempPage),
-                    Albums = myService.SearchAlbums(reqest, tempPage),
-                    Tracks = myService.SearchTracks(reqest, tempPage),
                     SearchReqest = reqest
                 };
-
-                if (Request.IsAjaxRequest() && numPage!=null)
+                if (tempPage == 1)
                 {
-                    return PartialView("Search", searchresult);
+                    myService.SetOnlineOffline("Online");
+                    searchresult.MyOnline.Artists.AddRange(myService.SearchArtists(reqest, tempPage));
+                    searchresult.MyOnline.Albums.AddRange(myService.SearchAlbums(reqest, tempPage));
+                    searchresult.MyOnline.Tracks.AddRange(myService.SearchTracks(reqest, tempPage));
+                }
+
+                myService.SetOnlineOffline("Offline");
+                searchresult.MyLocal.Artists.AddRange(myService.SearchArtists(reqest, tempPage));
+                searchresult.MyLocal.Albums.AddRange(myService.SearchAlbums(reqest, tempPage));
+                searchresult.MyLocal.Tracks.AddRange(myService.SearchTracks(reqest, tempPage));
+                                   
+                if (Request.IsAjaxRequest() && numPage != null)
+                {
+                    return PartialView("_SearchReqest", searchresult);
                 }
                 return View(searchresult);
-            }           
-            return View();          
-        }      
+            }
+            return View();
+        }
 
         public ActionResult MyAudio(string url)
         {
