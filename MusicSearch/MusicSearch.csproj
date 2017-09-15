@@ -290,6 +290,7 @@
     <Content Include="Views\Home\_Albums.cshtml" />
     <Content Include="Views\Home\Search.cshtml" />
     <Content Include="Views\Home\_SearchResult.cshtml" />
+    <Content Include="Views\Home\_SearchLocal.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
