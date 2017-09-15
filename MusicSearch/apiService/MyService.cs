@@ -38,7 +38,8 @@ namespace MusicSearch.apiService
                 { "GetTracksOfAlbum", "album.getinfo" },
                 { "SearchArtists", "artist.search" },
                 { "SearchAlbums", "album.search" },
-                { "SearchTracks", "track.search" }
+                { "SearchTracks", "track.search" },
+                { "GetInfoTrack", "track.getInfo" }
             };
 
             nodes = new Dictionary<string, string>
@@ -87,10 +88,12 @@ namespace MusicSearch.apiService
         {
             var webClient = new WebClient();
             webClient.QueryString.Add("method", method);
-           
-            webClient.QueryString.Add("page", numPage.ToString());
+
+            if (numPage != 0)
+                webClient.QueryString.Add("page", numPage.ToString());
             webClient.QueryString.Add("api_key", api_key);
-            webClient.QueryString.Add("limit", limit.ToString());
+            if(limit!=0)
+                webClient.QueryString.Add("limit", limit.ToString());
 
             if (artist != null)
                 webClient.QueryString.Add("artist", artist);
@@ -102,6 +105,7 @@ namespace MusicSearch.apiService
             if (track != null)
                 webClient.QueryString.Add("track",track);
             string returnString;
+
             using (webClient)
             {
                 returnString = webClient.DownloadString(reqestUrl);
@@ -128,7 +132,7 @@ namespace MusicSearch.apiService
             return true;
         }
 
-        public void ReqestMethod(XDocument document, string typeNode, bool reqestSearch = false)
+        public void ReqestMethod(XDocument document, string typeNode, bool reqestSearch = false, bool hasBeenChange = false)
         {
             var nodesOfTypeNodes = document.Descendants(typeNode);
             switch (typeNode)
@@ -143,7 +147,7 @@ namespace MusicSearch.apiService
                     break;
                 case "track":
                     foreach (var node in nodesOfTypeNodes)
-                        ReqestForTracks(node, reqestSearch);
+                        ReqestForTracks(node, reqestSearch, hasBeenChange);
                     break;
             }
         }
@@ -191,12 +195,19 @@ namespace MusicSearch.apiService
             ReqestMethod(document, "track");
         }
 
-        public void ReqestForTracks(XElement node, bool reqestSearch = false)
+        public void ReqestForTracks(XElement node, bool reqestSearch = false, bool renameThis = false)
         {
             Track track = new Track();
+            if (renameThis)
+            {
+                track.Album = EncodingFromUTF8toWin1251(ReqestForNode(node.Descendants("album").First(), "title"));
+            }
+            else
+            {
+                track.Name = EncodingFromUTF8toWin1251(ReqestForNode(node, "name"));
+                track.Artist = EncodingFromUTF8toWin1251(ReqestForNode(node, "name"));
+            }
             track.Listeners = 0;
-            track.Name = EncodingFromUTF8toWin1251(ReqestForNode(node, "name"));
-            track.Artist = EncodingFromUTF8toWin1251(ReqestForNode(node,"name"));
             if (!reqestSearch)
                 track.Duration = int.Parse(ReqestForNode(node, "duration"));
             else
@@ -204,7 +215,7 @@ namespace MusicSearch.apiService
                 track.ImageLarge = ReqestForNode(node, "image", new string[] { "size" }, new string[] { "large" });
                 track.Listeners = int.Parse(ReqestForNode(node, "listeners"));
             }
-            tracks.Add(track);
+            tracks.Add(track);    
         }
 
         public void SearchArtistsMehod(string reqest, int numPage)
@@ -310,26 +321,38 @@ namespace MusicSearch.apiService
         public void GetAuthorsFromDB(int numPage, string reqest = null)
         {
             if(reqest!=null)
-                authors.AddRange(dbContext.Artists.Where(item => item.Name == reqest).ToList());
+                authors.AddRange(dbContext.Artists.Where(item => item.Name.Contains(reqest) || reqest.Contains(item.Name)).ToList());
             else
             authors.AddRange(dbContext.Artists.ToList());
         }
 
         public void GetAlbumsFromDB(string author,int numPage)
         {
-            albums.AddRange(dbContext.Albums.Where(item => item.ArtistAlbum == author).ToList());
+            albums.AddRange(dbContext.Albums.Where(item => item.ArtistAlbum.Contains(author) || author.Contains(item.ArtistAlbum)).ToList());
         }
 
-        public void GetTracksFromDB(string author, string album, int numPage)
+        public void GetTracksFromDB(string author, string album, int numPage, int limit = 25)
         {
             if(album!=null)
             tracks.AddRange(dbContext.Tracks
-                .Where(item => item.Id < numPage * 25 && item.Album == album && item.Artist == author)
+                .Where(item => item.Id < numPage * limit && item.Album.Contains(album) && item.Artist.Contains(author))
                 .ToList());
             else
                 tracks.AddRange(dbContext.Tracks
-               .Where(item => (item.Album == author || item.Artist == author))
+               .Where(item => (item.Album.Contains(author) 
+               || item.Artist.Contains(author) 
+               || author.Contains(item.Artist) 
+               || author.Contains(item.Album)))
                .ToList());
+        }
+
+        public Track InfoTrack(string Artist, string Name)
+        {
+            tracks.Clear();
+            XDocument document = XDocument.Parse(
+                SetOptions(methods["GetInfoTrack"], 0, null, Artist, null,0,Name));
+            ReqestMethod(document, nodes["track"],false,true);
+            return tracks.First();
         }
     }
 }

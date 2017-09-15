@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Web;
 
@@ -33,11 +34,11 @@ namespace MusicSearch.apiService
 
         public void JastDoIt(object obj = null)
         {
-            //dbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE [Tracks]");
-            //dbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE [Albums]");
-            //dbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE [Artists]");
+            dbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE [Tracks]");
+            dbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE [Albums]");
+            dbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE [Artists]");
 
-            //dbContext.SaveChanges();
+            dbContext.SaveChanges();
             //return;
 
             resultSearchingFiles = new List<string>();
@@ -110,9 +111,7 @@ namespace MusicSearch.apiService
                 Name = audio.Tag.Title,
                 Duration = audio.Properties.Duration.Seconds,
                 Url = file
-            };
-            if (audio.Tag.Album != null)
-                track.Album = audio.Tag.Album;            
+            };         
             UpDataTrack(file, track);
             UpDataAlbum(track);
             UpDataArtist(track);           
@@ -122,11 +121,14 @@ namespace MusicSearch.apiService
         {
             if (dbContext.Tracks.Where(elem => elem.Url == file).Count() == 0)
             {
-                var updataTrack = SearchTracks(track.Artist + " " + track.Name.Split(' ').First()).First();
-                track.ImageLarge = updataTrack.ImageLarge;
-                track.Listeners = updataTrack.Listeners;
-                if (track.Album == null)                   
-                     track.Album = updataTrack.Album;
+                if(track.Name.Contains('('))
+                {
+                    track.Name = track.Name.Substring(0, track.Name.IndexOf('('));
+                }
+                var updataTrack = InfoTrack(track.Artist,track.Name);
+                //track.ImageLarge = updataTrack.ImageLarge;
+                //track.Listeners = updataTrack.Listeners;                  
+                track.Album = updataTrack.Album;
                 dbContext.Tracks.Add(track);
                 dbContext.SaveChanges();
             }
@@ -134,8 +136,6 @@ namespace MusicSearch.apiService
 
         public void UpDataAlbum(Track track)
         {
-            if (track.Album == null)
-                track.Album = track.Artist;
             var getdataAlbum = SearchAlbums(track.Album).Where(item => item.Name == track.Album);
             if (getdataAlbum.Count() == 0)
                 return;
