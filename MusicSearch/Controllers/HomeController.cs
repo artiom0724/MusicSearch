@@ -102,6 +102,33 @@ namespace MusicSearch.Controllers
             return View();
         }
 
+        public ActionResult AddArtists(int? numPage, string reqest = "")
+        {
+            int tempPage = numPage ?? 1;
+            myService.SetOnlineOffline("Online");
+            List<Artist> tempArtists = new List<Artist>();
+            tempArtists.AddRange(myService.SearchArtists(reqest, tempPage));           
+            return PartialView("_Items", tempArtists);
+        }
+
+        public ActionResult AddAlbums(int? numPage, string reqest = "")
+        {
+            int tempPage = numPage ?? 1;
+            myService.SetOnlineOffline("Online");
+            List<Album> tempAlbums = new List<Album>();
+            tempAlbums.AddRange(myService.SearchAlbums(reqest, tempPage));
+            return PartialView("_Albums", tempAlbums);
+        }
+
+        public ActionResult AddTracks(int? numPage, string reqest = "")
+        {
+            int tempPage = numPage ?? 1;
+            myService.SetOnlineOffline("Online");
+            List<Track> tempTracks = new List<Track>();
+            tempTracks.AddRange(myService.SearchTracks(reqest, tempPage));
+            return PartialView("Tracks", tempTracks);
+        }
+
         public ActionResult MyAudio(string url)
         {
             var file = url;
