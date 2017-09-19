@@ -12,31 +12,25 @@ namespace MusicSearch.Controllers
 {
     public class HomeController : Controller
     {
-        public MyService myService;
+        public OnlineWorker onlineWorker;
 
         public HomeController()
         {
-            myService = new MyService();
+            onlineWorker = new MyService();
         }
 
         public ActionResult Index(int ? author)
         {
             ViewBag.reqest = "Search";
-            int numPage = author ?? 1;
-            myService.SetOnlineOffline("Online");
-            AllArtists allArtists = new AllArtists();
-            allArtists.OnlineArtists.AddRange(myService.TopAuthorsForView(numPage));
-            if (numPage == 1)
-            {
-                myService.SetOnlineOffline("Offline");
-                allArtists.LocalArtists.AddRange(myService.TopAuthorsForView(numPage));
-            }
-            
+            int numPage = author ?? 1;           
+            List<Artist> artists = new List<Artist>();
+            artists.AddRange(onlineWorker.TopAuthorsForView(numPage));
+           
             if(Request.IsAjaxRequest() && numPage!=1)
             {
-                return PartialView("_Items", allArtists.OnlineArtists);
+                return PartialView("_Items", artists);
             }
-            return View(allArtists);
+            return View(artists);
         }
        
         public ActionResult Albums(int? numPage,string author = "")

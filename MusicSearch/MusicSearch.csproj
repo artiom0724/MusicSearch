@@ -160,8 +160,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="apiService\DBWorker.cs" />
     <Compile Include="apiService\MyService.cs" />
     <Compile Include="apiService\MyTask.cs" />
+    <Compile Include="apiService\OnlineWorker.cs" />
+    <Compile Include="apiService\TaskSetter.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />

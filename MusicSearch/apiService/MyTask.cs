@@ -9,14 +9,14 @@ using System.Web;
 
 namespace MusicSearch.apiService
 {
-    public class MyTask : MyService
+    public class MyTask : DBWorker
     {     
         private string[] extensionFiles;
         List<string> resultSearchingFiles;
+        public string offlinePath;
 
         public MyTask(string path)
-        {
-            offlinePath = path;
+        {        
             extensionFiles = new string[] { "mp3", "ogg", "wma", "flac", "aac", "mmf", "amr", "m4a", "m4r", "mp2", "wav" };
         }
 
@@ -125,7 +125,8 @@ namespace MusicSearch.apiService
                 {
                     track.Name = track.Name.Substring(0, track.Name.IndexOf('('));
                 }
-                var updataTrack = InfoTrack(track.Artist,track.Name);
+                MyService myService = new MyService();
+                var updataTrack = myService.InfoTrack(track.Artist,track.Name);
                 //track.ImageLarge = updataTrack.ImageLarge;
                 //track.Listeners = updataTrack.Listeners;                  
                 track.Album = updataTrack.Album;
@@ -136,7 +137,8 @@ namespace MusicSearch.apiService
 
         public void UpDataAlbum(Track track)
         {
-            var getdataAlbum = SearchAlbums(track.Album).Where(item => item.Name == track.Album);
+            MyService myService = new MyService();
+            var getdataAlbum = myService.SearchAlbums(track.Album).Where(item => item.Name == track.Album);
             if (getdataAlbum.Count() == 0)
                 return;
             var updataAlbum = getdataAlbum.First();
@@ -149,7 +151,8 @@ namespace MusicSearch.apiService
 
         public void UpDataArtist(Track track)
         {
-            var updataArtist = SearchArtists(track.Artist).First();
+            MyService myService = new MyService();
+            var updataArtist =myService.SearchArtists(track.Artist).First();
             if (dbContext.Artists.Where(elem => elem.Name == updataArtist.Name).Count() == 0)
             {
                 dbContext.Artists.Add(updataArtist);
