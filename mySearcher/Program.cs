@@ -11,8 +11,8 @@ namespace mySearcher
     {
         static void Main(string[] args)
         {
-            MyTask myTask = new MyTask(args.First());
-            myTask.JastDoIt();
+            LocalSearcher localSearcher = new LocalSearcher(@"C:\Users\a.zubel\Music");
+            localSearcher.JastDoIt();
         }
     }
 }

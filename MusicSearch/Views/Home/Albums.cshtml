@@ -1,29 +1,16 @@
 ﻿@using MusicSearch.Models
-@model AllAlbums
+@model List<Album>
 @{
     ViewBag.Title = "Albums";
 }
 <link rel="stylesheet" type="text/css" href="~/Content/Style.css" />
 
-
 <div class="row">
-    @if (Model.LocalAlbums != null)
-    {
-        <div class="col-md-12">
-            <h3>Local:</h3>
-            <div id="localList">
-                @Html.Partial("_Albums", Model.LocalAlbums)
-            </div>
-        </div>
-    }
-    else
-    {
-        <h3>No Local Albums...</h3>
-    }
+
     <div class="col-md-12">
         <h3>Online:</h3>
         <div id="scrolList">
-            @Html.Partial("_Albums", Model.OnlineAlbums)
+            @Html.Partial("_Albums", Model)
         </div>
     </div>
 </div>

@@ -1,5 +1,5 @@
 ﻿@using MusicSearch.Models
-@model LocalOnline
+@model SearchResult
 @if (Model != null)
 {
     <h3>Artists:</h3>
@@ -22,6 +22,7 @@
     {
         <button class="btn" style="min-width:20%; min-height:30px" id="addAlbums" OnClick="addAlbums()">More Albums...</button>
     }   
+
     <hr />
     <h3>Tracks:</h3>
     <div id="scrolListTracks">

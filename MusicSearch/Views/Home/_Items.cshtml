@@ -18,7 +18,11 @@
                     {
                         <img src="http://www.spartanwebsites.com/meadowcitymusicfest/wp-content/uploads/2016/05/meadow-city-music-festival-icon-1-300x300.png"width="300" height="300" />
                     }
-                    <h2>@item.Name<br />Listeners: @item.Listeners</h2>
+                    <h2>@item.Name<br /></h2>
+                    @if (item.Listeners != 0)
+                    {
+                        <h2 style="top:80%">Listeners: @item.Listeners</h2>
+                    }
                 </div>
             </div>
         </a>

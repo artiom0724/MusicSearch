@@ -37,7 +37,8 @@ namespace MusicSearch.apiService
             {
                 { "artist", "artist" },
                 { "album", "album" },
-                { "track", "track" }
+                { "track", "track" },
+                {"trackInfo","trackInfo" }
             };
 
             reqestUrl = "http://ws.audioscrobbler.com/2.0/";
@@ -137,6 +138,16 @@ namespace MusicSearch.apiService
             return win1251.GetString(win1251Bytes);
         }
 
+        public string EncodingFromWin1251ToUTF8(string encodeElement)
+        {
+            Encoding utf8 = Encoding.GetEncoding("UTF-8");
+            Encoding win1251 = Encoding.GetEncoding("Windows-1251");
+
+            byte[] win1251Bytes = utf8.GetBytes(encodeElement);
+            byte[] utf8Bytes = Encoding.Convert(win1251, utf8, win1251Bytes);
+            return utf8.GetString(utf8Bytes);
+        }
+
         public List<Artist> TopAuthorsForView(int numPage)
         {
             artists.Clear();
@@ -216,7 +227,7 @@ namespace MusicSearch.apiService
             Track track = new Track
             {
                 Name = EncodingFromUTF8toWin1251(ReqestForNode(node, "name")),
-                Artist = EncodingFromUTF8toWin1251(ReqestForNode(node, "artist")),
+                Artist = EncodingFromUTF8toWin1251(ReqestForNode(node.Descendants("artist").First(), "name")),
                 Listeners = 0
             };
             if (!reqestSearch)
@@ -228,6 +239,61 @@ namespace MusicSearch.apiService
             }
             tracks.Add(track);
         }
-          
+
+        public void SearchArtistsMehod(string reqest, int numPage)
+        {
+            XDocument document = XDocument.Parse(
+                SetOptions(methods["SearchArtists"], numPage, null, reqest, null).Replace("opensearch:", ""));
+            ReqestMethod(document, "artist");
+        }
+
+        public void SearchAlbumsMethod(string reqest, int numPage)
+        {
+            XDocument document = XDocument.Parse(
+                SetOptions(methods["SearchAlbums"], numPage, null, null, reqest).Replace("opensearch:", "").Replace("streamable", "playcount"));
+            ReqestMethod(document, "album", true);
+        }
+
+        public void SearchTracksMethod(string reqest, int numPage)
+        {
+            XDocument document = XDocument.Parse(
+                SetOptions(methods["SearchTracks"], numPage, null, null, null, reqest, 24).Replace("opensearch:", ""));
+            ReqestMethod(document, "track", true);
+        }
+
+        public List<Artist> SearchArtists(string reqest, int numPage = 1)
+        {
+            artists.Clear();
+            SearchArtistsMehod(reqest, numPage);
+            return artists;
+        }
+
+        public List<Album> SearchAlbums(string reqest, int numPage = 1)
+        {
+            albums.Clear();
+            SearchAlbumsMethod(reqest, numPage);
+            return albums;
+        }
+
+        public List<Track> SearchTracks(string reqest, int numPage = 1)
+        {
+            tracks.Clear();
+            SearchTracksMethod(reqest, numPage);
+            return tracks;
+        }
+
+        public Track InfoTrack(string Artist, string Name)
+        {
+            tracks.Clear();
+            XDocument document = XDocument.Parse(
+                SetOptions(methods["GetInfoTrack"], 0, null, Artist, null, Name, 0));
+            Track track = new Track()
+            {
+                Album = EncodingFromUTF8toWin1251(document.Descendants("album").First().Descendants("title").First().Value),
+                ImageLarge = ReqestForNode(document.Descendants("track").First(), "image", new string[] { "size" }, new string[] { "large" }),
+                Listeners = int.Parse(ReqestForNode(document.Descendants("track").First(), "listeners"))
+            };
+            return track;
+        }
     }
 }

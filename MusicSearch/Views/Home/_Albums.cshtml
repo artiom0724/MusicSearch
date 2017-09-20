@@ -16,7 +16,12 @@
                         {
                             <img src="http://pixelbrush.ru/uploads/posts/2010-06/1277568875_vinil.jpg" alt="" width="300" height="300" />
                         }
-                        <h2>@item.Name<br />Playcount: @item.Playcount</h2>
+                        
+                        <h2>@item.Name<br /></h2>
+                        @if (item.Playcount != 0)
+                        {
+                            <h2 style="top:80%">Playcount: @item.Playcount</h2>
+                        }
                     </div>
                 </div>
             </a>

@@ -9,18 +9,6 @@ namespace MusicSearch.Models
     {
         public SearchResult()
         {
-            MyLocal = new LocalOnline();
-            MyOnline = new LocalOnline();
-        }
-        public LocalOnline MyLocal { get; set; }
-        public LocalOnline MyOnline { get; set; }
-        public string SearchReqest { get; set; }
-
-    }
-    public class LocalOnline
-    {
-        public LocalOnline()
-        {
             Artists = new List<Artist>();
             Albums = new List<Album>();
             Tracks = new List<Track>();
@@ -28,5 +16,7 @@ namespace MusicSearch.Models
         public List<Artist> Artists { get; set; }
         public List<Album> Albums { get; set; }
         public List<Track> Tracks { get; set; }
-    }    
+        public string SearchReqest { get; set; }
+
+    }
 }

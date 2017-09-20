@@ -5,17 +5,10 @@
 }
 <h3 id="myreqest">@Model.SearchReqest</h3>
 <div class="row">
-        <div class="col-md-12">
-            <h1>Local:</h1>
-            <div id="localList">
-               @Html.Partial("_SearchLocal", Model.MyLocal)
-            </div>
-        </div>
-        <hr />
     <div class="col-md-12">
         <h1>Online:</h1>
         <div id="scrolList">
-            @Html.Partial("_SearchResult", Model.MyOnline)
+            @Html.Partial("_SearchResult", Model)
         </div>
     </div>
 </div>

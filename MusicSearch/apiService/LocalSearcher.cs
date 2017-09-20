@@ -9,37 +9,31 @@ using System.Web;
 
 namespace MusicSearch.apiService
 {
-    public class MyTask : DBWorker
+    public class LocalSearcher : DBWorker
     {     
         private string[] extensionFiles;
         List<string> resultSearchingFiles;
         public string offlinePath;
 
-        public MyTask(string path)
+        public LocalSearcher(string path)
         {        
             extensionFiles = new string[] { "mp3", "ogg", "wma", "flac", "aac", "mmf", "amr", "m4a", "m4r", "mp2", "wav" };
-        }
-
-        public void StartTimer()
-        {
-            int num = 0;
-            TimerCallback tm = new TimerCallback(JastDoIt);
-            Timer timer = new Timer(tm, num, 0, 300000);//300000
-        }
-     
-        public void SetOfflinePath(string path)
-        {
             offlinePath = path;
-        }
+        }     
 
-        public void JastDoIt(object obj = null)
+        public void ClearAllTables()
         {
             dbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE [Tracks]");
             dbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE [Albums]");
             dbContext.Database.ExecuteSqlCommand("TRUNCATE TABLE [Artists]");
 
             dbContext.SaveChanges();
-            //return;
+        }
+
+        public void JastDoIt(object obj = null)
+        {
+            ClearAllTables();
+            return;
 
             resultSearchingFiles = new List<string>();
             resultSearchingFiles.Clear();
@@ -125,10 +119,10 @@ namespace MusicSearch.apiService
                 {
                     track.Name = track.Name.Substring(0, track.Name.IndexOf('('));
                 }
-                MyService myService = new MyService();
-                var updataTrack = myService.InfoTrack(track.Artist,track.Name);
-                //track.ImageLarge = updataTrack.ImageLarge;
-                //track.Listeners = updataTrack.Listeners;                  
+                OnlineWorker onlineWorker = new OnlineWorker();
+                var updataTrack = onlineWorker.InfoTrack(track.Artist, track.Name);
+                track.ImageLarge = updataTrack.ImageLarge;
+                track.Listeners = updataTrack.Listeners;
                 track.Album = updataTrack.Album;
                 dbContext.Tracks.Add(track);
                 dbContext.SaveChanges();
@@ -137,8 +131,8 @@ namespace MusicSearch.apiService
 
         public void UpDataAlbum(Track track)
         {
-            MyService myService = new MyService();
-            var getdataAlbum = myService.SearchAlbums(track.Album).Where(item => item.Name == track.Album);
+            OnlineWorker onlineWorker = new OnlineWorker();
+            var getdataAlbum = onlineWorker.SearchAlbums(track.Album).Where(item => (item.Name == track.Album) && (item.ArtistAlbum == track.Artist));
             if (getdataAlbum.Count() == 0)
                 return;
             var updataAlbum = getdataAlbum.First();
@@ -151,8 +145,8 @@ namespace MusicSearch.apiService
 
         public void UpDataArtist(Track track)
         {
-            MyService myService = new MyService();
-            var updataArtist =myService.SearchArtists(track.Artist).First();
+            OnlineWorker onlineWorker = new OnlineWorker();
+            var updataArtist = onlineWorker.SearchArtists(track.Artist).First();
             if (dbContext.Artists.Where(elem => elem.Name == updataArtist.Name).Count() == 0)
             {
                 dbContext.Artists.Add(updataArtist);
